@@ -5,14 +5,13 @@ if not os.name == 'nt':
 import d3dshot
 from SimConnect import *
 # Only usable on Windows OS
-from PySide2.QtCore import QObject, SIGNAL, Signal, Slot   
 import cv2
 import time
 import imutils
 import sys
 import numpy as np
 import cv2 as cv
-import config as config
+import config.configs as config
 
 class Recorder():
     def __init__(
@@ -26,27 +25,11 @@ class Recorder():
         self.image_format = image_format
         self.fps = fps
         self.pause = 1 / fps  # time in sec
-        self.save_values = True
+        self.vars = config.VARS
+        self.vars_be = config.VARS_BEGIN_END
+        self.units = config.UNITS
+        self.units_be = config.UNITS_BEGIN_END
         os.makedirs(self.root+'/'+folder_name, exist_ok=True)
-    def __init__(
-            self,
-            config:dict,
-            d3d
-        ):
-            super(Recorder,self).__init__()
-            self.root = config['root']
-            self.folder_name = config['dataset_name']
-            self.number_images = config['nb_imgs']
-            self.image_format = config['image_format']
-            self.fps = config['fps']
-            self.vars = config['vars']
-            self.vars_be = config['vars_be']
-            self.units = config['units']
-            self.units_be = config['units_be']
-            self.pause = 1 / self.fps  # time in sec
-            self.save_values = True
-            self.d = d3d
-            os.makedirs(self.root+'/'+self.folder_name, exist_ok=True)
 
 class Msfs_recorder(Recorder):
     """
@@ -176,40 +159,3 @@ class Image_recorder(Recorder):
         finally:
             f_i.close()
 
-
-class Video_recorder(Recorder):
-    """
-    TO BE REMOVED, records a full video
-    """
-    def run(self):
-        # initialize d3d capture
-        d = d3dshot.create(capture_output="numpy")
-        f_i = open(self.folder_name + "/images.txt", "w")
-        # d.screenshot_to_disk_every(self.pause,self.folder_name)
-        # The duration in seconds of the video captured
-        capture_duration = int(self.pause * self.number_images)
-
-        cap = cv2.VideoCapture(0)
-
-        fourcc = cv2.VideoWriter_fourcc(*"DIVX")
-        out = cv2.VideoWriter("output.avi", fourcc, 20.0, (640, 480))
-        time.sleep(capture_duration)
-        start_time = time.time()
-        while int(time.time() - start_time) < capture_duration:
-            ret, frame = cap.read()
-            if ret == True:
-                frame = cv2.flip(frame, 0)
-                out.write(frame)
-            else:
-                break
-
-        cap.release()
-        out.release()
-        cv2.destroyAllWindows()
-        try:
-            [f_i.write("%i.png\n" % (i + 1)) for i in range(self.number_images)]
-        except:
-            print("Unexpected error:", sys.exc_info()[0])
-            raise
-        finally:
-            f_i.close()

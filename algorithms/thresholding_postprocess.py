@@ -1,10 +1,5 @@
-# from ..utils.morph import strel
 import numpy as np
-# from skimage import img_as_ubyte, img_as_float
-# from skimage import io as skio
-# import skimage.morphology as morpho
 import cv2 as cv
-
 
 class Opening():
     def __init__(self, kernel=(3, 3)):

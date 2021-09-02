@@ -19,7 +19,7 @@ class PourcentageThresh() :
         _frame = frame[frame>25]
         hist,_ = np.histogram(_frame.ravel(),256,[0,256])
         hist_cumsum = np.cumsum(hist)/np.sum(hist)
-        # on prend a partir d'un pourcentage
+        # we keep a certain pourcentage
         thresh_hist = np.argmax(hist_cumsum>self.treshold_hist)
         print(f"thresh_hist {thresh_hist} hist {np.sum(hist)}")
 
@@ -103,11 +103,11 @@ class KorniaSP():
         frame : numpy.array
             Taille du noyau pour l'extractions des maximas
         """
-        # On lit la frame sur le GPU
+        # GPU reads the frame
         data_cpu: torch.tensor = kornia.image_to_tensor(frame, keepdim=False)  # BxCxHxW
         data = data_cpu.float().to(0)
 
-        # On récupère le mask des maxs et les maxes avec
+        # we keep maxes mask
         maxes = conv_soft_argmax2d(data, (7, 7), temperature=5.0, output_value=True)[1]
         maxes = maxes.squeeze()
         maxes = (maxes - maxes.min()) / (maxes.max() - maxes.min())
@@ -117,82 +117,28 @@ class KorniaSP():
         data_threshed = data.clone()
         data_threshed[~maxes] = 0
 
-        # seuillage a 80
-        # mask = data > 70
+        # We trucate the histogram at 60
         mask = data > 60
         data_std_threshed = data.clone()
         # data_std_threshed[~mask] = 0
-        # On recupère le mask avec la std et comme pour les maxs
+        # retrieves mask with std, like maxes
         dmean = data_std_threshed[mask].cpu().mean()
         dstd = data_std_threshed[mask].cpu().std()
-        # La std est utilisé comme valeur de seuillage
+        # std value is used a threshold value
         thresh_value = (dmean).item()-dstd
-        # thresh_value = 80
-        print("mean %d std %d "%(dmean,dstd))
-        print("tresh value : %d"% thresh_value)
         mask = data > thresh_value
         data_std_threshed = data.clone()
         data_std_threshed[~mask] = 0
 
-        # On combine les deux cartes filtrés
+        # we combine both maps
         data_combine = data_std_threshed + data_threshed
         data_combine = data_combine > thresh_value
         data_combine = data_combine.float()
 
-        # On termine par une dilatation qui permet de d'avoir de plus gros points
+        # we do a openning to remove noise and little detection
+        # it also keeps and enhance bigger ones
         open_struct = torch.ones(3, 3)
-        # open_struct[:,-1] = 0
-        # open_struct[-1,:] = 0
-
         dilation_struct = open_struct.to(0)
-        # On externalise l'ouverture
         data_combine = opening(data_combine.unsqueeze(0).unsqueeze(0), dilation_struct)
-        # open_struct = torch.ones(3, 3)
-        # data_combine = open(data_combine.unsqueeze(0).unsqueeze(0), dilation_struct)
-        # data_combine = data_combine.unsqueeze(0).unsqueeze(0)
 
         return data_combine.cpu().squeeze().numpy().astype(np.uint8)
-
-class BlobDetection():
-    def __init__(self,config_file="default.txt"):
-
-        params = cv.SimpleBlobDetector_Params()
-        
-        params.filterByColor = False
-        # params.filterByArea= True
-        # params.filterByCircularity= False
-        # params.filterByInertia= False
-        # params.filterByConvexity= False
-        # params.maxThreshold= 255
-        # params.minThreshold= 20
-        # params.minArea = 150
-        # params.maxArea = 400
-        # params.minRepeatability = 2
-        params.maxThreshold= 127
-        params.minThreshold= 5
-        params.thresholdStep= 5
-        params.minDistBetweenBlobs= 20
-        params.filterByArea= True
-        params.maxArea= 35
-        params.minArea= 1.5
-        params.filterByCircularity= True
-        params.maxCircularity= 0.7
-        params.minCircularity= 0.3
-        params.filterByInertia= True
-        params.maxInertiaRatio= 0.1
-        params.minInertiaRatio= 0
-        params.filterByConvexity= True
-        params.maxConvexity= 1
-        params.minConvexity= 0.5
-        self.params = params
-        self.detector = cv.SimpleBlobDetector_create(params)
-
-    def process(self,frame):
-        bg = np.zeros_like(frame,np.uint8)
-        keypoints = self.detector.detect(frame)
-        self._keypoints = keypoints
-        print("Detected -> "+str(len(keypoints)))
-        return bg
-    @property
-    def keypoints(self):
-        return self._keypoints
