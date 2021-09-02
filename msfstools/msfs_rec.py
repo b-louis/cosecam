@@ -12,12 +12,9 @@ import imutils
 import sys
 import numpy as np
 import cv2 as cv
-import msfsrecorder.config as config
+import config as config
 
-class Recorder(QObject):
-    progress = Signal(int)
-    finished = Signal()
-
+class Recorder():
     def __init__(
         self, root: str, folder_name: str,d3d : object, number_images: int, image_format: str, fps: float = 1.0
     ):
@@ -64,13 +61,6 @@ class Msfs_recorder(Recorder):
     """
     def set_d3d(self,d3d):
         self.d = d3d
-    def fake_run(self):
-        print("fake")
-        for i in range(self.number_images):
-            time.sleep(0.01)
-            print(i)
-            self.progress.emit(int(100*((i+1)/self.number_images)))
-        self.finished.emit()
     def run(self):
         """
         Runs the recording
@@ -139,7 +129,6 @@ class Msfs_recorder(Recorder):
                 delta = time.time() - delta
                 print("delta = %f, pause = %f" % (delta, self.pause))
                 time.sleep(max(self.pause - delta, 0))
-                self.progress.emit(int(100*((count+1)/self.number_images)))
             str_values = ""
             for var in sim_vars_end:
                 str_values += str(aq.get(var)) + ","
@@ -151,7 +140,6 @@ class Msfs_recorder(Recorder):
         finally:
             f.close()
             f_i.close()
-            self.finished.emit()
 
 
 def frame_buffer_to_disk(d: d3dshot.D3DShot, directory=None):

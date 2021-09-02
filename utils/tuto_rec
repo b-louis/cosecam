@@ -1,0 +1,31 @@
+#### TUTO REC FS2020
+
+prerequis : 
+- MSFS2020
+- Windows 7 ou +
+- ananconda
+    les packages suivants dans: 
+    |pip
+    > simconnect
+    > d3dshot
+- de preference 2 ecrans (l'un dédié à la prise de vue et le second pour monitoré/lancer les commandes)
+
+
+0) config
+le jeu converti mal  les unités (au 27/07/2021) laisser en feets et kts
+mieux de pré-écrire son script, pour le lancer plus rapidement
+
+1) lancer jeu, selectionner voler
+2) choisir son itinéraire, plusieurs facon de le faire.
+    moi = clique droit depart arrivée
+3) dans journal de navigation choisir son attitude voulu (en feets, ex 3400ft ~ 1000 m)
+4) choisir ses conditions météo de vol (peut etre changé en cours de jeu)
+5) lancer le vol
+6) l'ia ne pilote pas l'avion au debut de la partie, il faut le faire manuelement.
+    dés que le jeu est lancer mettre la simu en pause et coché ia commande dans ....,
+    puis remettre en resume la simulation 
+7) attendre quelques instant le temps que l'attitude se stabiliser, qq fois la position de base est mauvaise (certains points on des position initial fixes)
+8) mettre la simulation en pause et changer la caméra dans ..., en selectionnant la caméra drone
+9) faire crtl + espace => met la cam droite
+10) retirer toute les fenetres parasites et dépause.
+11) lancer le scripte 
