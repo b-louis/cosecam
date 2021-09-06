@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1227</width>
+    <height>1000</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1000</width>
+    <height>500</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>MSFS2020 recorder</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="7" column="0">
+     <widget class="QPushButton" name="pushButton_run">
+      <property name="text">
+       <string>Run</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="0">
+     <widget class="QProgressBar" name="progressBar">
+      <property name="acceptDrops">
+       <bool>false</bool>
+      </property>
+      <property name="value">
+       <number>0</number>
+      </property>
+      <property name="textVisible">
+       <bool>true</bool>
+      </property>
+      <property name="invertedAppearance">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QGroupBox" name="groupBox_simvars">
+      <property name="title">
+       <string>Simvars</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="2" column="1">
+        <widget class="QListWidget" name="listWidget_simvars">
+         <property name="selectionMode">
+          <enum>QAbstractItemView::MultiSelection</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLabel" name="label_simvars">
+         <property name="text">
+          <string>Captured Values during the whole recordings</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QListWidget" name="listWidget_simvars_endbegin">
+         <property name="selectionMode">
+          <enum>QAbstractItemView::MultiSelection</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QLabel" name="label_simvars_endbegin">
+         <property name="text">
+          <string>Captured values at the end and begining</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QGroupBox" name="groupBox_options">
+      <property name="title">
+       <string>Options</string>
+      </property>
+      <property name="flat">
+       <bool>false</bool>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <widget class="QLabel" name="label_fps">
+         <property name="text">
+          <string>FPS</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="spinBox_fps">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="value">
+          <number>1</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_nb_imgs">
+         <property name="text">
+          <string>Number of images</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="spinBox_nb_imgs">
+         <property name="value">
+          <number>50</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_format">
+         <property name="text">
+          <string>Format</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="comboBox_format">
+         <property name="currentText">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_display">
+         <property name="text">
+          <string>Recording Display</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="comboBox_display">
+         <property name="currentText">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_modes">
+         <property name="text">
+          <string>Modes</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="checkBox_modes">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Only records the images, &lt;span style=&quot; font-weight:600;&quot;&gt;plane's values are ignored&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Only images</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QGroupBox" name="verticalGroupBox_main">
+      <property name="title">
+       <string>Process</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0">
+       <property name="leftMargin">
+        <number>9</number>
+       </property>
+       <property name="topMargin">
+        <number>9</number>
+       </property>
+       <property name="rightMargin">
+        <number>9</number>
+       </property>
+       <property name="bottomMargin">
+        <number>9</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="label_root">
+         <property name="text">
+          <string>Root folder</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_root" stretch="0,0">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QToolButton" name="toolButton_root">
+           <property name="text">
+            <string>...</string>
+           </property>
+           <property name="checkable">
+            <bool>false</bool>
+           </property>
+           <property name="popupMode">
+            <enum>QToolButton::DelayedPopup</enum>
+           </property>
+           <property name="toolButtonStyle">
+            <enum>Qt::ToolButtonIconOnly</enum>
+           </property>
+           <property name="autoRaise">
+            <bool>false</bool>
+           </property>
+           <property name="arrowType">
+            <enum>Qt::NoArrow</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEdit_root">
+           <property name="text">
+            <string/>
+           </property>
+           <property name="placeholderText">
+            <string>Set root folder for all recordings</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_dataset">
+         <property name="text">
+          <string>Dataset name</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEdit_dataset">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="text">
+          <string>dataset</string>
+         </property>
+         <property name="placeholderText">
+          <string>Set the dataset name</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="5" column="0">
+     <widget class="Line" name="line">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="2" rowspan="8">
+     <widget class="QTextBrowser" name="textBrowser_tuto">
+      <property name="html">
+       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:7.875pt; font-weight:600; text-decoration: underline; color:#ff0000;&quot;&gt;Need help&lt;/span&gt;&lt;span style=&quot; font-size:7.875pt; font-weight:600;&quot;&gt;?&lt;/span&gt;&lt;span style=&quot; font-size:7.875pt;&quot;&gt; Read this &lt;/span&gt;&lt;a href=&quot;https://www.google.com/&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;HOW-TO&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:7.875pt;&quot;&gt; to get started&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="openExternalLinks">
+       <bool>true</bool>
+      </property>
+      <property name="openLinks">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1227</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

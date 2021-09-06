@@ -1,0 +1,597 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1023</width>
+    <height>898</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Orthorectification</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="tabPosition">
+       <enum>QTabWidget::North</enum>
+      </property>
+      <property name="tabShape">
+       <enum>QTabWidget::Rounded</enum>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <property name="usesScrollButtons">
+       <bool>true</bool>
+      </property>
+      <property name="documentMode">
+       <bool>false</bool>
+      </property>
+      <property name="tabsClosable">
+       <bool>false</bool>
+      </property>
+      <property name="movable">
+       <bool>false</bool>
+      </property>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string>General</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QGroupBox" name="groupBox">
+          <property name="title">
+           <string>Data</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_3">
+           <item>
+            <widget class="QLabel" name="label_23">
+             <property name="text">
+              <string>Type of input</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="comboBox_type_in">
+             <property name="currentText">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="Line" name="line_5">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label">
+             <property name="text">
+              <string>Root Folder</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_4">
+             <property name="spacing">
+              <number>6</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QToolButton" name="toolButton_in_rasters">
+               <property name="text">
+                <string>...</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="lineEdit_root">
+               <property name="text">
+                <string>H:/images_database</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_dataset">
+             <property name="text">
+              <string>Dataset name</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="lineEdit_dataset">
+             <property name="text">
+              <string>124_paris_1</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="Line" name="line_4">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_5">
+             <property name="text">
+              <string>Input Points :</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="checkBox_input_points">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="layoutDirection">
+              <enum>Qt::LeftToRight</enum>
+             </property>
+             <property name="autoFillBackground">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>enable</string>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+             <property name="tristate">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QWidget" name="horizontalWidget_input_points" native="true">
+             <layout class="QHBoxLayout" name="horizontalLayout_5">
+              <property name="spacing">
+               <number>6</number>
+              </property>
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="QToolButton" name="toolButton_in_points">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="lineEdit_input_points"/>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="Line" name="line_2">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_9">
+             <property name="text">
+              <string>Output folder</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_10">
+             <item>
+              <widget class="QToolButton" name="toolButton_out_rasters">
+               <property name="text">
+                <string>...</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="lineEdit_output_rasters">
+               <property name="text">
+                <string>H:/images_database/test_paris</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_6">
+             <property name="text">
+              <string>Output Format</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="comboBox_format"/>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_10">
+             <property name="text">
+              <string>Output Mode</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="comboBox_mode"/>
+           </item>
+           <item>
+            <spacer name="verticalSpacer">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBox_2">
+          <property name="title">
+           <string>GDAL</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_4">
+           <item>
+            <widget class="QLabel" name="label_3">
+             <property name="text">
+              <string>Source EPSG</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="lineEdit_srs_epsg">
+             <property name="maxLength">
+              <number>32767</number>
+             </property>
+             <property name="readOnly">
+              <bool>false</bool>
+             </property>
+             <property name="placeholderText">
+              <string>default 4326</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_4">
+             <property name="text">
+              <string>Target EPSG</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="lineEdit_tgt_epsg">
+             <property name="maxLength">
+              <number>32767</number>
+             </property>
+             <property name="frame">
+              <bool>true</bool>
+             </property>
+             <property name="placeholderText">
+              <string>default 3857</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="Line" name="line">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_7">
+             <property name="text">
+              <string>Elevation type</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="comboBox_elevation_type"/>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_2">
+             <property name="text">
+              <string>Elevation File</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_6">
+             <property name="spacing">
+              <number>6</number>
+             </property>
+             <item>
+              <widget class="QToolButton" name="toolButton_elev">
+               <property name="text">
+                <string>...</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="lineEdit_elev_file">
+               <property name="toolTip">
+                <string/>
+               </property>
+               <property name="inputMask">
+                <string/>
+               </property>
+               <property name="text">
+                <string>H:/MNT/dted-2/DTED/E002/N48.DT2</string>
+               </property>
+               <property name="placeholderText">
+                <string>DTED or TIFF for DEM , GRD for geoid</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_2">
+       <attribute name="title">
+        <string>Advanced</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_5">
+        <item>
+         <widget class="QGroupBox" name="groupBox_4">
+          <property name="title">
+           <string>GDAL/OTB</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_9">
+           <item>
+            <widget class="QLabel" name="label_20">
+             <property name="text">
+              <string>GCPS generation method</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="comboBox_gcps_methods"/>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_21">
+             <property name="text">
+              <string>RPCS generation method</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="comboBox_rpcs_methods"/>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_17">
+             <property name="text">
+              <string>Orthorectification method</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="comboBox_ortho_methods"/>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_19">
+             <property name="text">
+              <string>Output Type</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="lineEdit_gdal_format">
+             <property name="placeholderText">
+              <string>default GTiff</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_4">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBox_3">
+          <property name="title">
+           <string/>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_8">
+           <item>
+            <widget class="QLabel" name="label_15">
+             <property name="text">
+              <string>Descriptors</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="comboBox_descriptors"/>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_16">
+             <property name="text">
+              <string>Match distance</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QDoubleSpinBox" name="doubleSpinBox">
+             <property name="decimals">
+              <number>2</number>
+             </property>
+             <property name="singleStep">
+              <double>0.010000000000000</double>
+             </property>
+             <property name="value">
+              <double>0.100000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_18">
+             <property name="text">
+              <string>Minimum matched features</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="spinBox">
+             <property name="maximum">
+              <number>100000</number>
+             </property>
+             <property name="value">
+              <number>100</number>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_5">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_3">
+       <attribute name="title">
+        <string>Log</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0">
+         <widget class="QTextBrowser" name="textBrowser">
+          <property name="tabChangesFocus">
+           <bool>false</bool>
+          </property>
+          <property name="undoRedoEnabled">
+           <bool>false</bool>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_4">
+       <attribute name="title">
+        <string>Help</string>
+       </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QTextBrowser" name="textBrowser_2">
+          <property name="html">
+           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;This QT-GUI is use for orthorectification, before use you need :&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;- GDAL&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;- OTB &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QProgressBar" name="progressBar">
+        <property name="value">
+         <number>0</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_run">
+        <property name="text">
+         <string>Run</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_cancel">
+        <property name="text">
+         <string>Cancel</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1023</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

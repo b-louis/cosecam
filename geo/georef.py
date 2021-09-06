@@ -1,16 +1,15 @@
-# from coscam.config import config
-from utils.features import *
-from PySide2.QtCore import QObject, SIGNAL, Signal, Slot
+from PySide2.QtCore import QObject, SIGNAL, Signal, Slot   
 from utils.homography import Homography
 import shutil
 from osgeo import gdal, osr
 import numpy as np
 import os
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import cv2 as cv
 import sys
 import time
-sys.path.append(os.path.abspath('..'))
+sys.path.insert(1, os.path.join(sys.path[0], '../..'))
+from utils.features import *
 if not os.name == 'nt':
     # Only unusable on Windows OS (unless GDAL<3 and python = 3.5.*)
     import otbApplication
@@ -164,7 +163,9 @@ class OrthoRectification():
         return exitcode
 
 
-class Georeferencer():
+class Georeferencer(QObject):
+    progress = Signal(int)
+    finished = Signal()
     def __init__(self, gcp_gen, rpc_gen, rectification, dataset=None):
         super(Georeferencer, self).__init__()
         self.gcp_gen = gcp_gen
@@ -194,7 +195,8 @@ class Georeferencer():
             data1 = data2
             data2 = self.dataset[i]
             self.count = i
-
+            self.progress.emit(int(100*(i+1)/self.dataset.number_images))
+        self.finished.emit()
     def _georef(self, data1, data2):
         'Full georefencement function'
 

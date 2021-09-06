@@ -5,6 +5,7 @@ if not os.name == 'nt':
 import d3dshot
 from SimConnect import *
 # Only usable on Windows OS
+from PySide2.QtCore import QObject, SIGNAL, Signal, Slot   
 import cv2
 import time
 import imutils
@@ -13,9 +14,23 @@ import numpy as np
 import cv2 as cv
 import config.configs as config
 
-class Recorder():
+class Recorder(QObject):
+    progress = Signal(int)
+    finished = Signal()
+
+
     def __init__(
-        self, root: str, folder_name: str,d3d : object, number_images: int, image_format: str, fps: float = 1.0
+        self, 
+        root, 
+        folder_name,
+        d3d , 
+        number_images, 
+        image_format, 
+        fps = 1.0,
+        vars = config.VARS,
+        vars_be= config.VARS_BEGIN_END,
+        units= config.UNITS,
+        units_be= config.UNITS_BEGIN_END
     ):
         super(Recorder,self).__init__()
         self.root = root
@@ -24,11 +39,11 @@ class Recorder():
         self.number_images = number_images
         self.image_format = image_format
         self.fps = fps
+        self.vars = vars
+        self.vars_be = vars_be
+        self.units = units
+        self.units_be = units_be
         self.pause = 1 / fps  # time in sec
-        self.vars = config.VARS
-        self.vars_be = config.VARS_BEGIN_END
-        self.units = config.UNITS
-        self.units_be = config.UNITS_BEGIN_END
         os.makedirs(self.root+'/'+folder_name, exist_ok=True)
 
 class Msfs_recorder(Recorder):
@@ -112,6 +127,8 @@ class Msfs_recorder(Recorder):
                 delta = time.time() - delta
                 print("delta = %f, pause = %f" % (delta, self.pause))
                 time.sleep(max(self.pause - delta, 0))
+                self.progress.emit(int(100*((count+1)/self.number_images)))
+
             str_values = ""
             for var in sim_vars_end:
                 str_values += str(aq.get(var)) + ","
@@ -123,6 +140,7 @@ class Msfs_recorder(Recorder):
         finally:
             f.close()
             f_i.close()
+            self.finished.emit()
 
 
 def frame_buffer_to_disk(d: d3dshot.D3DShot, directory=None):
