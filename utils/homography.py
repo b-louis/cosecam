@@ -7,7 +7,7 @@ import sys
 import os
 
 sys.path.append(os.path.abspath('..'))
-from coscam.utils.features import *
+from utils.features import *
 
 start_timer = time.time()
 MIN_MATCH_COUNT = 10
@@ -46,7 +46,8 @@ class Homography:
         # la matrice d'echelle de l'homography
         S = np.array([[1,0,0],[0,1,0],[0,0,1]])
         # Cela permet d'avoir moins de descripteur et moins de pixels pour l'homographie
-        kp1,kp2,good = compute_sift(img1,img2,d)
+        # kp1,kp2,good = compute_sift(img1,img2,d)
+        kp1,kp2,good = compute_orb(img1,img2,30)
         print("Temps de calcul des descripteurs --- %s seconds ---" % (time.time() - start_timer))
         start_timer = time.time()
         if len(good)>MIN_MATCH_COUNT:
@@ -78,3 +79,14 @@ class Homography:
             print("CRASH")
             return
         
+def main():
+    homography = Homography()
+    img1 = cv.imread('E:/Repos/depth/000.jpg')
+    img2 = cv.imread('E:/Repos/depth/001.jpg')
+    newi1, newi2 = homography.global_homgraphy(img1,img2,30)
+    cv.imwrite('E:/Repos/depth/newi11.png',newi1)
+    cv.imwrite('E:/Repos/depth/newi22.png',newi2)
+
+
+if __name__ == '__main__':
+    main()

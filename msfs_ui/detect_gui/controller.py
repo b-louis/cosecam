@@ -85,6 +85,8 @@ class DetectionWorker(QObject):
                     cv.rectangle(result, (x-BOUND_ADD, y-BOUND_ADD),
                                 (x+w+BOUND_ADD, y+h+BOUND_ADD), (255, 0, 0), 2)
                 # print("Dear")
+                # TODO :
+                # Rewrite the temp file location
                 os.makedirs("tmp_imgs",exist_ok=True)
                 os.makedirs("tmp_imgs/thresh/",exist_ok=True)
                 os.makedirs("tmp_imgs/result/",exist_ok=True)

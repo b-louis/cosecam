@@ -242,10 +242,12 @@ class Georeferencer(QObject):
     # SIFTS
     # SIFTS
 
-        print("START SIFTS :")
+        # print("START SIFTS :")
+        print("START ORB :")
         start_time = time.time()
 
-        kp1, kp2, good = compute_sift(img1, img2, d=0.1)
+        # kp1, kp2, good = compute_sift(img1, img2, d=0.1)
+        kp1, kp2, good = compute_orb(img1, img2, 30)
         print(f"\t Number of features :{len(good)}")
         print("Temps de calcul des descripteurs --- %s seconds ---" %
               (time.time() - start_time))
@@ -543,7 +545,7 @@ else:
 
         """
         # replace E:/OTB-7.3.0-Win64/bin/gdalwarp.exe with your otb's gdalwarp path
-        cmd = 'E:/OTB-7.3.0-Win64/bin/gdalwarp.exe -rpc -to RPC_DEM={rpcPath} -of GTiff {srcPath} {outPath} -overwrite -s_srs EPSG:4326 -t_srs EPSG:3857'\
+        cmd = 'E:/OTB-7.3.0-Win64/bin/gdalwarp.exe -rpc -to RPC_DEM={rpcPath} -of GTiff {srcPath} {outPath} -overwrite -s_srs EPSG:4326 -t_srs EPSG:3857 '\
             .format(srcPath=in_image,
                     outPath=out_image,
                     rpcPath=dem)
