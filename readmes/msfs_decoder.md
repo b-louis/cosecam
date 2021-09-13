@@ -22,10 +22,12 @@ Values that are **None** in **values.txt** are interpolated,
 |--|--|--|
 | **getAll** |*str* : value_name <br> The value field we want to get |return all values from one value field  |
 | **getResolution** |  |return the image resolution|
+
 ## Notes
 ### Returned entries 
 Entries are return in different forms with the ***only_path*** and ***only_images*** parameters. 
 When both are **False**, we get a dictionary like  :
+
 >*{'image' : np.array([....]), 'values' : np.array([....])}*
 
 When only ***only_path*** is **False**, we get a dictionary like  :
@@ -40,13 +42,13 @@ When both are **True**, we get a *string* of the image path   :
 ### Attributes
 |name  | description |
 |--|--|
-| units | Recorded simvars units  |
-| vars | Recorded simvars names |
-| number_images | number of recorded images |
+| **units** | Recorded simvars units  |
+| **vars** | Recorded simvars names |
+| **number_images** | number of recorded images |
 
-### Si
 
-## Exemple
+
+## Example
 ```python
 from coscam.msfstools.msfs_dec import *
 dec = Msfs_decoder("/mnt/plus/images_database/","3400ft_netherland")

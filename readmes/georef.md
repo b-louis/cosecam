@@ -2,33 +2,34 @@
 # Geo
 
 This part of the application is used for orthorectification.
-Before going further be sure you have set your environment correctly ##href##.
+Before going further be sure you have set your environment correctly (see [requierements](../README.MD))
+
 >Note that it still very rough, some features aren't implemented (those with a '*').
 ## Overview
 This module is use to do the whole orthorectification from a non georeferenced image with GPS values at center to a orthorectified image (georeferenced or not)
 
 ## Functions
-|  |  |
-|--|--|
-| coords_distance |  |
-| cal_lat_lon|  |
-| angle_from_coord|  |
-| load_gcps|  |
-| generate_input_tif|  |
-| convert_save_gcps|  |
-| readgeom |  |
-| generate_rpc|  |
-| projection_gdalcmd|  |
+| *functions*            | *description* |
+|:--|:--|
+| **coords_distance** | Computes the distance between on earth's surface |
+| **cal_lat_lon** | Computes the longitude and latitude from a point with distance and angle |
+| **angle_from_coord** | Computes the angle between true north and a point |
+| **load_gcps** | Loads *GCPs* from a file and parses them in a *numpy.array* |
+| **generate_input_tif** | Generates a georeferenced image from image, a list of *GCPs* and a elevation map |
+| **convert_save_gcps** | Converts the *GCPs* format for *GDAL* |
+| **readgeom** | Reads a *geom* file and parses it in *numpy.array* |
+| **generate_rpc** | Generates *RPCs* with a list of points |
+| **projection_gdalcmd** | *gdalwarp*  CLI function warpper in python |
 
 ## Classes
-|  |  |
-|--|--|
-| StereoGCP|  |
-| RpcGenerator|  |
-| OrthoRectification|  |
-| Georeferencer|  |
+| *classes* | *description* |
+|:--|:-|
+| **StereoGCP**          | Class that generates *GCPs* |
+| **RpcGenerator** | Class that generates *RPCs* |
+| **OrthoRectification** | Class for orthorectification calculation |
+| **Georeferencer** | Main class for the whole process |
 
-## Exemple
+## Example
 
 ```python
 dem_file = "/home/user/DTEDS/N40E01.dted"
@@ -63,5 +64,5 @@ print(f"COMMAND:\n{cmd}")
 Replace **E:/OTB-7.3.0-Win64/bin/gdalwarp.exe** with your gdalwarp path.
 
 ### On Linux: 
-You can use *[OTBApplication](https://www.orfeo-toolbox.org/CookBook/PythonAPI.html)* instead, but for now we still use *gdalwarp* on cli mode
+You can use *[OTBApplication](https://www.orfeo-toolbox.org/CookBook/PythonAPI.html)* instead, but for now it still uses *gdalwarp* on CLImode
 

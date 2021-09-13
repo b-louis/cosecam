@@ -1,13 +1,10 @@
 # Msfs recorder
 This module is use to record images from *Flight Simulator 2020*, with the plane's values in parallel.
 ## Overview 
-The class, **Msfs_recoder** reads all datas from two files :
+The class, **Msfs_recoder** saves all images and saves two files :
 - **values.txt** that contains plane related values at each time (gps position, heading,...)
 - **images.txt** that contains all the images path, the number of images and entries values is the same.
 
-**Msfs_decoder** implements iterator's method and **\_\_getitem\_\_** to access data more easily.
-
-Values that are **None** in **values.txt** are interpolated, 
 ## Parameters
 | name | description |
 |--|--|
@@ -42,6 +39,8 @@ There's two ways to run the recording:
 - with the QT interface, ([tutorial here](msfs_recorder_howto.md))
 - with a python script
 
+###### A python script example
+
 ```python
 from coscam.msfstools.msfs_rec import *
 d3d = d3dshot.create(capture_output="numpy")
@@ -62,11 +61,13 @@ Capture time can have a variable offset. This is due to two factors.
 
 Firstly, if your game is running at a low frame rate, your computer will run slower too and have much more difficulty to take values at the right time. 
 
-Then, the way *SimVars* are retrieve, they are taken sequentially even when we have a lot of them. Some value that couldn't be capture at right time will be assign to *None*.
+Then, the way ***SimVars*** are retrieve, they are taken sequentially even when we have a lot of them. Some value that couldn't be capture at right time will be assign to ***None***.
 
 For now, the pixel size is hard coded, 
+
 ```python
 # set image' scale (TO CHANGE !)
 self.pix_scale = 100/200  #(1/2 pixel for 1meter)
 ```
-In case you have images that have a dif
+
+In case you have images that have a different pixel scale, you need to change this value in this [file](../msfstools/msfs_rec.py)
