@@ -1,6 +1,6 @@
 _pycache_/*
 *.pyc
-*.png
+
 *.bmp
 *.geom
 tmp*

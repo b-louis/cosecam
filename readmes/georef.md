@@ -19,6 +19,7 @@ This module is use to do the whole orthorectification from a non georeferenced i
 | readgeom |  |
 | generate_rpc|  |
 | projection_gdalcmd|  |
+
 ## Classes
 |  |  |
 |--|--|
@@ -26,6 +27,7 @@ This module is use to do the whole orthorectification from a non georeferenced i
 | RpcGenerator|  |
 | OrthoRectification|  |
 | Georeferencer|  |
+
 ## Exemple
 
 ```python
