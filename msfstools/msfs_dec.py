@@ -117,10 +117,10 @@ class Msfs_decoder:
 
     def __init__(
         self,
-        only_path,
-        only_images,
         root_folder,
         folder_name,
+        only_path=False,
+        only_images=False,
         ):
         
         self.only_path = only_path

@@ -1,4 +1,5 @@
-from PySide2.QtCore import QObject, SIGNAL, Signal, Slot   
+from PySide2.QtCore import QObject, SIGNAL, Signal, Slot
+import imutils   
 from utils.homography import Homography
 import shutil
 from osgeo import gdal, osr
@@ -159,6 +160,7 @@ class OrthoRectification():
     def __call__(self, input, out):
         exitcode = self.proj_function(input, out, self.dem)
         if exitcode == 0:
+            # pass
             os.remove(input)
         return exitcode
 
@@ -242,12 +244,19 @@ class Georeferencer(QObject):
     # SIFTS
     # SIFTS
 
-        # print("START SIFTS :")
-        print("START ORB :")
+        print("START SIFTS :")
+        # print("START ORB :")
+        # print("START AKAZE :")
+        # print("START AKAZE FLANN:")
         start_time = time.time()
-
-        # kp1, kp2, good = compute_sift(img1, img2, d=0.1)
-        kp1, kp2, good = compute_orb(img1, img2, 30)
+        resized = 1200
+        resized_factor = 3840/resized
+        img1r = imutils.resize(img1,resized)
+        img2r = imutils.resize(img2,resized)
+        kp1, kp2, good = compute_sift(img1r, img2r, d=0.1)
+        # kp1, kp2, good = compute_orb(img1, img2, 35)
+        # kp1, kp2, good = compute_akaze(img1, img2, 20)
+        # kp1, kp2, good = compute_akaze_flann(img1, img2, threshold=0.005)
         print(f"\t Number of features :{len(good)}")
         print("Temps de calcul des descripteurs --- %s seconds ---" %
               (time.time() - start_time))
@@ -263,8 +272,11 @@ class Georeferencer(QObject):
 
         start_time = time.time()
         # revoir ordre car mélangé !!
-        src_pts = np.float32([kp1[m.queryIdx].pt for m in good]).reshape(-1, 2)
-        dst_pts = np.float32([kp2[m.trainIdx].pt for m in good]).reshape(-1, 2)
+        src_pts = [kp1[m.queryIdx].pt for m in good]
+        dst_pts = [kp2[m.trainIdx].pt for m in good]
+
+        src_pts = resized_factor*np.float32(src_pts).reshape(-1, 2)
+        dst_pts = resized_factor*np.float32(dst_pts).reshape(-1, 2)
         # for otb
         np.savetxt('src_pts.txt', src_pts)
         src_pts[:, 1] = 2400-src_pts[:, 1]
@@ -324,6 +336,8 @@ class Georeferencer(QObject):
         cv.imwrite(img1_final, img1_geo)
         cv.imwrite(img2_final, img2_geo)
         # voir si utile ou non
+        # exit()
+
         os.remove(img1_geopath)
         os.remove(img2_geopath)
         print("Temps de calcul des homolast --- %s seconds ---" %

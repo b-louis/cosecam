@@ -92,10 +92,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             geo=[]
             # try :
             dec = Msfs_decoder(
+                values['root_folder'],
+                values['folder_name'],
                 values['only_path'],
                 values['only_images'],
-                values['root_folder'],
-                values['folder_name']
                 )
             center = dec.getResolution()/2
             gcp_gen = StereoGCP(center)
