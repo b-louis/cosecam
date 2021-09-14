@@ -271,7 +271,6 @@ class Georeferencer(QObject):
         print(f"\t GCPS OFFSET :{self.offset[::-1]}")
 
         start_time = time.time()
-        # revoir ordre car mélangé !!
         src_pts = [kp1[m.queryIdx].pt for m in good]
         dst_pts = [kp2[m.trainIdx].pt for m in good]
 
@@ -335,7 +334,6 @@ class Georeferencer(QObject):
 
         cv.imwrite(img1_final, img1_geo)
         cv.imwrite(img2_final, img2_geo)
-        # voir si utile ou non
         # exit()
 
         os.remove(img1_geopath)
@@ -471,7 +469,6 @@ if not os.name == 'nt':
     def projection_gdalcmd(in_image, out_image, dem):
         """
         Warps the input image with rpcs/gcps/elevation file
-        TODO : finish it
 
         Attributes
         ----------
@@ -559,7 +556,7 @@ else:
 
         """
         # replace E:/OTB-7.3.0-Win64/bin/gdalwarp.exe with your otb's gdalwarp path
-        cmd = 'E:/OTB-7.3.0-Win64/bin/gdalwarp.exe -rpc -to RPC_DEM={rpcPath} -of GTiff {srcPath} {outPath} -overwrite -s_srs EPSG:4326 -t_srs EPSG:3857 '\
+        cmd = 'gdalwarp -rpc -to RPC_DEM={rpcPath} -of GTiff {srcPath} {outPath} -overwrite -s_srs EPSG:4326 -t_srs EPSG:3857 '\
             .format(srcPath=in_image,
                     outPath=out_image,
                     rpcPath=dem)

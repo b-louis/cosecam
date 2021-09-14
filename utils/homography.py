@@ -15,16 +15,18 @@ MIN_MATCH_COUNT = 10
 class Homography:
     def global_homgraphy(self,img1,img2,d):
         """
-        Computes the global homography ...
-        TODO : finish it
+        Computes the global homography 
 
         Attributes
         ----------
-        points : list[ [[int,int],[int,int]]* ]
-            List of points, img1 to img2.
+        img1 : np.array[]
+            Array representing a image
 
-        D : float
-            Distance between the two centers  
+        img2 : np.array[]
+            Array representing a image
+
+        d : float
+            discriminating value between keypoints  
         
         Return
         ----------
@@ -65,7 +67,6 @@ class Homography:
             ty = round(max(np.min(dst[0]),np.min(dst[1])))
             # ty = 50
             # tx = 50
-            # print(dst)
             # on effectue l'homgraphie
             img2_warp = cv.warpPerspective(img2, H, (img2.shape[1], img2.shape[0]),flags=(cv.WARP_INVERSE_MAP+cv.INTER_CUBIC ))
             
@@ -76,7 +77,7 @@ class Homography:
             print("Temps pour l'homographie --- %s seconds ---" % (time.time() - start_timer))
             return img1,img2_warp
         else:
-            print("CRASH")
+            print("CRASH in homography")
             return
         
 def main():

@@ -15,7 +15,37 @@ The class, **Msfs_recoder** saves all images and saves two files :
 | **output_type** | str : type of output, ***png*** by default  |
 | **fps** | int : recording frame rate, ***1*** by default |
 
+## Data structure
+
+Images are save as **000.png**, **001.png**,...
+
+For example, we can use ***rootfolder* = "datasets"** and ***dataset_name* = example1 ** 
+
+```
+.
+└── datasets/
+    ├── example1/
+    │   ├── 000.png
+    │   ├── 001.png
+    │   ├── 002.png
+    │   ├── 003.png
+    │   ├── 004.png
+    │   ├── 005.png
+    │   ├── values.txt
+    │   └── images.txt
+    └── example2/
+        ├── 000.png
+        ├── 001.png
+        ├── 002.png
+        ├── 003.png
+        ├── values.txt
+        └── images.txt
+```
+
+
+
 ## Configuration
+
 **The game doesn't converts units well ( as 27/07/2021 ) keep *feets* and *kts*.**
 
 If you have a 2 screen setup, the game launches on the **primary screen**.
@@ -24,7 +54,7 @@ In case you need a higher output resolution you can tweak the ***DLSS*** paramet
 If you don't use QT interface, it's better to pre-write your script before you start the game.
 ### Qt interface :
 
-![Recorder gui](E:\CodeClean\all_cose_tools\coscam\readmes\rec_gui_editr.png)
+![Recorder gui](..\images\rec_gui_editr.png)
 1. root folder is the main folder containing all your saved dataset
 2. dataset's name
 3. all the values that are taken during the whole recording

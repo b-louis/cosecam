@@ -21,7 +21,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         super(MainWindow, self).__init__()
         self.setupUi(self)
         self.fillUi()
-        self.bindUI()
+        self.bindUi()
         # Init
         self.image_pairs = []
         self.current = -1
@@ -42,7 +42,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.image_container.setPixmap(pixmap)
         # self.image_container.resize(max(pixmap.width() //2,1920),max(pixmap.height() //2,1200))
         # self.image_container.resize(200,200)
-    def bindUI(self):
+    def bindUi(self):
 
         def hider_params_detection():
             [x.setHidden(True) for x in self.button_detection.values()]
@@ -146,7 +146,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             choices.threshold_selected["Pourcentage of maximum"] = choices.threshold_list["Pourcentage of maximum"](
                 self.param_t_pourcent.findChild(QtWidgets.QDoubleSpinBox,"doubleSpinBox_19").value()
             )
-            choices.threshold_selected["Pourcentage"] = choices.threshold_list["Pourcentage"](
+            choices.threshold_selected["Cumsum"] = choices.threshold_list["Cumsum"](
                 self.param_pourcent_sp.findChild(QtWidgets.QDoubleSpinBox,"doubleSpinBox_21").value(),
                 self.param_pourcent_sp.findChild(QtWidgets.QDoubleSpinBox,"doubleSpinBox_23").value(),
             )
@@ -184,22 +184,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 'postprocess':choices.postprocess_selected[self.comboBox_postprocess.currentText()],
                 'threshold':choices.threshold_selected[self.comboBox_threshold.currentText()],
                 'threshold_postprocess':choices.threshold_postprocess_selected[self.comboBox_thresh_postprocess.currentText()],
-                # 'detection':choices.detection_selected['Frame Difference'],
-                # 'preprocess':choices.preprocess_selected['Median Filter'],
-                # 'postprocess':choices.postprocess_selected['NoProcess'],
-                # 'threshold':choices.threshold_selected['Value'],
-
                 'input':self.lineEdit_input.text(),
             }
             return values
 
-        def process_finished():
-            print('yay!')
         def sendStop():
             self.thread.terminate()
             self.thread.quit()
             self.thread.exit()
-            print("STOP!!!")
         def setParameters():
             values = get_values()
             if self.current < 0:
@@ -213,7 +205,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 values['threshold_postprocess']
                 )
         def setImageFrame(image):
-            pixmap = QtGui.QPixmap("E:/Repos/cose-experiments/tmp_imgs/result.png")
+            pixmap = QtGui.QPixmap("tmp_imgs/result.png")
             pixmap = pixmap.scaled(pixmap.width() //4,pixmap.height() //4)
             self.image_container.setPixmap(pixmap)
         def run():

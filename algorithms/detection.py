@@ -85,7 +85,6 @@ class MeanBG:
         mean = alpha * m_mean + (1.0 - alpha) * data
         bg = (mean + 0.5).astype(np.uint8)
         if update_mask.any() :
-            print(self.mean[update_mask].shape)
             self.mean[update_mask] = mean[update_mask]
             self.bg[update_mask] = bg[update_mask]
         else:

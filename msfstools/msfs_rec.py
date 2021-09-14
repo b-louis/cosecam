@@ -52,7 +52,7 @@ class Msfs_recorder(Recorder):
         - Images (tested on 4K >= images)
         - MSFS2020 Simvars (such as attitude)
     \n
-    TODO:
+    Ameliorations : 
     * Find a way to record at constant delta with right corresponding values \n
     For now Only starting/ending values could be a good way to solve some issues but at cost of precision
     As is for now (delta is too large)
@@ -142,7 +142,6 @@ class Msfs_recorder(Recorder):
             f_i.close()
             self.finished.emit()
 
-
 def frame_buffer_to_disk(d: d3dshot.D3DShot, directory=None):
     directory = d._validate_directory(directory)
 
@@ -150,7 +149,6 @@ def frame_buffer_to_disk(d: d3dshot.D3DShot, directory=None):
     for i, frame in enumerate(tuple(d.frame_buffer)):
         frame_pil = d.capture_output.to_pil(frame)
         frame_pil.save(f"{directory}/{len(d.frame_buffer)-i-1}.png")
-
 
 class Image_recorder(Recorder):
     """
@@ -176,4 +174,3 @@ class Image_recorder(Recorder):
             raise
         finally:
             f_i.close()
-

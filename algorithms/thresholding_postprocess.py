@@ -7,7 +7,6 @@ class Opening():
 
     def process(self, input):
         kernel = self.kernel
-        print(kernel)
         output = cv.morphologyEx(input, cv.MORPH_OPEN,kernel)
         return output
     def __call__(self, input,x):

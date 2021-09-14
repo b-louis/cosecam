@@ -47,10 +47,6 @@ class DetectionWorker(QObject):
     def set_image(self,imagePath):
         self.imagePath = imagePath
     def run(self):
-        # print(self.detection)
-        # print(self.preprocess)
-        # print(self.postprocess)
-        # print(self.threshold)
         imagePath = self.imagePath
         try:
             for i in range(len(imagePath)) :
@@ -84,8 +80,6 @@ class DetectionWorker(QObject):
                     x, y, w, h = cntr
                     cv.rectangle(result, (x-BOUND_ADD, y-BOUND_ADD),
                                 (x+w+BOUND_ADD, y+h+BOUND_ADD), (255, 0, 0), 2)
-                # print("Dear")
-                # TODO :
                 # Rewrite the temp file location
                 os.makedirs("tmp_imgs",exist_ok=True)
                 os.makedirs("tmp_imgs/thresh/",exist_ok=True)
@@ -106,10 +100,8 @@ class DetectionWorker(QObject):
                 self.nextstep.emit(detect)
                 if self.stop:
                     self.stop = False
-                    print("Stop!")
                     break
         except Exception as e:
-            # print("Unexpected error:", e)
             print(traceback.format_exc())
             raise
         self.finished.emit()

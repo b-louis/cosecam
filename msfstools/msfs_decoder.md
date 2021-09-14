@@ -8,7 +8,18 @@ The class, **Msfs_decoder** reads all datas from two files :
 
 **Msfs_decoder** implements iterator's method and **\_\_getitem\_\_** to access data more easily.
 
-Values that are **None** in **values.txt** are interpolated, 
+Values that are **None** in **values.txt** are interpolated, for example if we have :
+
+|  1   | None | None | None |  2   |
+| :--: | :--: | :--: | :--: | :--: |
+
+we will get :
+
+|  1   | 1.25 | 1.5  | 1.75 |  2   |
+| :--: | :--: | :--: | :--: | :--: |
+
+
+
 ## Parameters
 | name | description |
 |--|--|
@@ -23,7 +34,12 @@ Values that are **None** in **values.txt** are interpolated,
 | **getAll** |*str* : value_name <br> The value field we want to get |return all values from one value field  |
 | **getResolution** |  |return the image resolution|
 
+## Data structure
+
+Same as [msfs_recorder](msfs_recorder.md)
+
 ## Notes
+
 ### Returned entries 
 Entries are return in different forms with the ***only_path*** and ***only_images*** parameters. 
 When both are **False**, we get a dictionary like  :

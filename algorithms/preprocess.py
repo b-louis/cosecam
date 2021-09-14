@@ -17,15 +17,9 @@ class GaussFilter():
 def medianFilter(input,filter_size=1):
     return cv.medianBlur(input,filter_size)
 
-# def tree_filter(frame):
-#     lower_range = np.array([70,30,10])  # Set the Lower range value of color in BGR
-#     upper_range = np.array([140,255,120])   # Set the Upper range value of color in BGR
-#     mask = cv.inRange(frame,lower_range,upper_range) # Create a mask with range
-#     return mask
-
 
 def tree_filter(frame,detect):
-    ' Tree filter on colors '
+    ' Tree filtering on colors '
     # un simple and pour essayer
     kernel = np.ones((3,3),np.uint8)
     detect_resize = skimage.measure.block_reduce(detect, (4,4), np.max)

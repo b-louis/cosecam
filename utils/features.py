@@ -1,22 +1,67 @@
 import numpy as np
 import cv2 as cv
 
+DESCRIPTOR_SIFT = 0
+DESCRIPTOR_ORB = 1
+DESCRIPTOR_AKAZE = 2
+MATCHER_BRUTE = 0
+MATCHER_FLANN = 1
+FLANN_INDEX_KDTREE = 1
+FLANN_INDEX_LSH = 6
+
+def compute_features(img1,img2,d,mode=[DESCRIPTOR_SIFT,MATCHER_FLANN]):
+    descriptor = None
+    index_params = None
+    search_params = None
+    distance_norm = None
+    if(mode[0] == DESCRIPTOR_SIFT):
+        descriptor = cv.SIFT_create()
+        index_params = dict(algorithm = FLANN_INDEX_KDTREE, trees = 5)
+        search_params = dict(checks = 50)
+        distance_norm = cv.NORM_L2
+    else :
+        index_params= dict(algorithm = FLANN_INDEX_LSH,
+                        table_number = 6, # 12
+                        key_size = 12,     # 20
+                        multi_probe_level = 1) #2
+        search_params = dict(check=50) 
+        distance_norm = cv.NORM_HAMMING
+        if(mode[0] == DESCRIPTOR_ORB):
+            descriptor = cv.ORB_create()
+        elif(mode[0] == DESCRIPTOR_AKAZE):
+            descriptor = cv.AKAZE()
+        else :
+            print("Config is invalid ! May not work properly ! Descriptor is not defined")
+            return
+    kp1, des1 = descriptor.detectAndCompute(img1,None)
+    kp2, des2 = descriptor.detectAndCompute(img2,None)
+    good = []
+    i=0
+    if(mode[0] == MATCHER_BRUTE):
+        matcher = cv.BFMatcher(distance_norm, crossCheck=True)
+        matches = matcher.match(des1,des2)
+        matches = sorted(matches, key = lambda x:x.distance)
+        for m in matches:
+            if m.distance < d :
+                good.append(m)
+            i+=1
+        
+    elif(mode[0] == MATCHER_FLANN):
+        matcher = cv.FlannBasedMatcher(index_params, search_params)
+        matches = matcher.knnMatch(des1,des2,k=2)
+        for m,n in matches:
+            if m.distance < d*n.distance:
+                good.append(m)
+            i+=1
+    else :
+        print("Config is invalid ! May not work properly ! matcher is not defined")
+        return 
+    return kp1,kp2,good
+    
+
 def compute_sift(img1,img2,d):
     """
-    This function computes the formula ...
-    TODO : finish it
-
-    Attributes
-    ----------
-    points : list[ [[int,int],[int,int]]* ]
-        List of points, img1 to img2.
-
-    D : float
-        Distance between the two centers  
-    
-    Return
-    ----------
-    
+    computes SIFT features with a FLANN matcher  
 
     """
     # On initialise le descripteur SIFT
@@ -41,20 +86,7 @@ def compute_sift(img1,img2,d):
     return kp1,kp2,good
 def compute_orb(img1,img2,d):
     """
-    This function computes the formula ...
-    TODO : finish it
-
-    Attributes
-    ----------
-    points : list[ [[int,int],[int,int]]* ]
-        List of points, img1 to img2.
-
-    D : float
-        Distance between the two centers  
-    
-    Return
-    ----------
-    
+    computes ORB features with a BruteForce matcher  
 
     """
     # On initialise le descripteur SIFT
@@ -81,21 +113,7 @@ def compute_orb(img1,img2,d):
 
 def compute_akaze(img1,img2,d):
     """
-    This function computes the formula ...
-    TODO : finish it
-
-    Attributes
-    ----------
-    points : list[ [[int,int],[int,int]]* ]
-        List of points, img1 to img2.
-
-    D : float
-        Distance between the two centers  
-    
-    Return
-    ----------
-    
-
+    computes AKAZE features with a BruteForce matcher  
     """
     # On initialise le descripteur SIFT
     akaze = cv.AKAZE_create()
@@ -121,20 +139,7 @@ def compute_akaze(img1,img2,d):
 
 def compute_akaze_flann(img1,img2,threshold):
     """
-    This function computes the formula ...
-    TODO : finish it
-
-    Attributes
-    ----------
-    points : list[ [[int,int],[int,int]]* ]
-        List of points, img1 to img2.
-
-    D : float
-        Distance between the two centers  
-    
-    Return
-    ----------
-    
+    computes SIFT features with a FLANN matcher     
 
     """
     # On initialise le descripteur SIFT

@@ -6,10 +6,6 @@ All saved variables from MSFS, there is 2 types:
 It's the same for the units (they are linked to vars)
 """
 
-# TODO:
-# Cleaner code
-# Add name indexing for values
-
 VARS = [
     "PLANE_ALT_ABOVE_GROUND",
     "PLANE_LATITUDE",

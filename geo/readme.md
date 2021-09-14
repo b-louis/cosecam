@@ -2,7 +2,7 @@
 # Geo
 
 This part of the application is used for orthorectification.
-Before going further be sure you have set your environment correctly (see [requierements](../README.MD))
+Before going further be sure you have set your environment correctly (see [requierements](../README.md))
 
 >Note that it still very rough, some features aren't implemented (those with a '*').
 ## Overview
@@ -27,22 +27,67 @@ This module is use to do the whole orthorectification from a non georeferenced i
 | **StereoGCP**          | Class that generates *GCPs* |
 | **RpcGenerator** | Class that generates *RPCs* |
 | **OrthoRectification** | Class for orthorectification calculation |
-| **Georeferencer** | Main class for the whole process |
+| **Georeferencer** | Main class for the whole process, <br>computes all images within the specified folder |
 
 ## Example
 
 ```python
+from coscam.geo import *
+
+# digital elevation file
 dem_file = "/home/user/DTEDS/N40E01.dted"
-dec = Msfs_decoder("/home/user/datasets/","exemple")
+# setting the images centers for Steregcp calculation
 center = dec.getResolution()/2
+
+# initialize all classes
 gcp_gen = StereoGCP(center)
 rpc_gen = RpcGenerator(dem_file)
 orthorect = OrthoRectification(projection_gdalcmd,dem_file)
-# we create the
+
+# we create the main object, that compute the whole 
 geo = Georeferencer(gcp_gen,rpc_gen,orthorect)
-geo.setDataset(dec,"/home/user/datasets/exemple_orthorectified/")
+
+dec = Msfs_decoder("/home/user/datasets/","exemple")
+
+# when we setDataset, we set the dataset object and 
+# the orthorectification folder output
+geo.setDataset(dec,"/home/user/datasets/example1_orthorectified/")
+
+# it computes all images in the folder
 geo.run()
 ```
+
+## Data structure
+
+See  [msfs_recorder](msfs_recorder.md) for input data structure.
+
+The output structure is : 
+
+```.
+└── datasets/
+    ├── example1/
+    │   ├── 000.png
+    │   ├── 001.png
+    │   ├── 002.png
+    │   ├── 003.png
+    │   ├── 004.png
+    │   ├── 005.png
+    │   ├── values.txt
+    │   └── images.txt
+    └── example1_orthorectified/
+        ├── 000.png
+        ├── 001.png
+        ├── 002.png
+        ├── 003.png
+        ├── 004.png
+        ├── 005.png
+        ├── values.txt
+        └── images.txt
+```
+
+Output images are orthorectified, not georeferenced and homographied by pairs .
+
+Example : **000.png** is homographied with **001.png**, and **002.png** is homographied with **003.png**  but **000.png** are not **002.png**
 
 ## Installation issues
 

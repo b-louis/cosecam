@@ -10,7 +10,8 @@ class NoTresholding():
     def process(self,frame):
         return frame
 
-class PourcentageThresh() :
+class Cumsum() : 
+    'Cumulative histogram sum'
     def __init__(self,treshold_hist=0.9,factor=1.3):
         self.treshold_hist = treshold_hist
         self.factor = factor
@@ -22,28 +23,17 @@ class PourcentageThresh() :
         # we keep a certain pourcentage
         thresh_hist = np.argmax(hist_cumsum>self.treshold_hist)
         print(f"thresh_hist {thresh_hist} hist {np.sum(hist)}")
-
-    #################OLD!!#######################
-        # on calcul le gradient de l'histogramme
-        # grad_hist = np.gradient(hist_cumsum[thresh_hist:])
-
-        # l'instant où la somme devient de plus en plus constante
-        # hist_bump = np.argmax(grad_hist<self.factor)
-        # threshold = (thresh_hist + hist_bump)*1.3
-
-        # (on peut s'imaginer que l'on était dans une sorte de creux)
-        # _, diff_thresh = cv.threshold(frame,threshold,255,cv.THRESH_BINARY)
-    #################OLD!!#######################
-
         _, diff_thresh = cv.threshold(frame,thresh_hist,255,cv.THRESH_BINARY)
         return diff_thresh
 class Value() :
+    'Fixed value to keep'
     def __init__(self,treshold_hist=127):
         self.treshold_hist = treshold_hist
     def process(self,frame):
         _, diff_thresh = cv.threshold(frame,self.treshold_hist,255,cv.THRESH_BINARY)
         return diff_thresh
 class StdTresh() :
+    'Values we keep with a std'
     def __init__(self,factor=1.3):
         self.factor = factor    
     def process(self,frame):
@@ -54,6 +44,7 @@ class StdTresh() :
         print(f"mean {mean} , std {std}")
         return threshed_image
 class Pourcent() :
+    'Keeping all a above a pourcentage from global maxima'
     def __init__(self,pourcent=0.20):
         self.pourcent = pourcent
     def process(self,frame):
@@ -66,28 +57,24 @@ class KorniaSP():
     Pseudo blob thresholding on GPU
     /!\ since this is based on a old kornia version, it might not work as expected
 
-    Les différentes étapes du seuille sont :
-    - Un filtrage par maximas locaux (on cherche les zones de maximas, cad des sortes de blobs)
-    - Un filtrage avec la standard deviation 
-    - Une erosion sur la sommation de ces deux filtrages
-    - Une dilatation pour récupérer de plus gros points
+    The different steps are:
+    - local maximas detection
+    - thresholiding with a STD representation of the histogram 
+    - A errosion and summing the two maps
+    - A dillatation to retrieve bigger points
     ...
 
     Attributes
     ----------
     kernel : tuple
-        Taille du noyau pour l'extractions des maximas
+        kernel size
     temperature : float
-        Temperature de la fonction (à voir !)
+        temperature for regularisation (see kornia doc)
     sigma : int
-        Le nombre de sigma que l'on prend a partir du centre (mean), ce qui donne mean + sigma*std
+        values we keep at mean + sigma*std
     max_thresh : float
-        Le pourcentage des maximas retenues (1-max_thresh)
+        maximas that we kept (1-max_thresh)
 
-    Methods
-    -------
-    process(additional=""):
-        Prints the person's name and age.
     """
 
     def __init__(self,kernel=(7,7),temperature=5.0,sigma=3,max_thresh=0.2):
@@ -96,12 +83,12 @@ class KorniaSP():
         pass
     def process(self,frame):
         """
-        Seuillage pseudo "Blob-detector" sur GPU
+        Pseudo "Blob-detector" thresholding on GPU
 
         Attributes
         ----------
         frame : numpy.array
-            Taille du noyau pour l'extractions des maximas
+            An image to threshold
         """
         # GPU reads the frame
         data_cpu: torch.tensor = kornia.image_to_tensor(frame, keepdim=False)  # BxCxHxW

@@ -1,10 +1,10 @@
 import os,sys
-sys.path.append(os.path.abspath('e:/Repos/cose-experiments/'))
-from coscam.algorithms.detection import *
-from coscam.algorithms.postprocess import *
-from coscam.algorithms.preprocess import *
-from coscam.algorithms.thresholding import *
-from coscam.algorithms.thresholding_postprocess import *
+sys.path.insert(1, os.path.join(sys.path[0], '../..'))
+from algorithms.detection import *
+from algorithms.postprocess import *
+from algorithms.preprocess import *
+from algorithms.thresholding import *
+from algorithms.thresholding_postprocess import *
 detection_list = {
     "Weighted Mean":WeightMean,
     "Frame Difference":FrameDiff,
@@ -22,7 +22,7 @@ postprocess_list = {
     }
 threshold_list = {
     "Value":Value,
-    "Pourcentage":PourcentageThresh,
+    "Cumsum":Cumsum,
     "Pourcentage of maximum":Pourcent,
     "Standard deviation":StdTresh,
     "Kornia custom":KorniaSP,
@@ -48,7 +48,7 @@ postprocess_selected = {
     }
 threshold_selected = {
     "Value":[],
-    "Pourcentage":[],
+    "Cumsum":[],
     "Pourcentage of maximum":[],
     "Standard deviation":[],
     "Kornia custom":[],

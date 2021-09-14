@@ -4,35 +4,20 @@ It's divided in 5 parts :
 
 |  |  |
 |--|--|
-| ***[algorithms](readmes/algorithms.md)*** | with all the detection/thresholding/processing algorithms  |
-| ***[geo](readmes/georef.md)*** |  with all the georeferencement/orthorectification  |
-| ***[msfstools](readmes/msfs_tools.md)*** | with all the MSFS2020 (Flight Simulator 2020), recording/decoding functions  |
-| ***[utils](readmes/utils.md)*** | with features and homography fucntion  |
-| ***[config](readmes/config.md)*** | config file  |
+| ***[algorithms](algorithms/readme.md)*** | with all the detection/thresholding/processing algorithms  |
+| ***[geo](geo/readme.md)*** |  with all the georeferencement/orthorectification  |
+| ***[msfstools](msfstools/readme.md)*** | with all the MSFS2020 (Flight Simulator 2020), recording/decoding functions  |
+| ***[utils](utils/readme.md)*** | with features and homography fucntion  |
+| ***[config](config/readme.md)*** | config file  |
 
 
 ## Requirements
 
-- GDAL
-- Python
-	- opencv
-	- numpy
-	- libgdal
-	- imutils
-	- skimage
-	- kornia
-	- torch
-	- d3dshot
-    - pyside2
-- PIP
-- CONDA
+To recreate the environement do :
 
-For recording :
+`conda env create -f environment.yaml`
 
-- Windows 7 or + ( impossible on Unix systems )
-- Flight Simulator 2020
-- simconnect
-- 2 screens for recording **(highly recommended)**
+
 
 
 > Written with [StackEdit](https://stackedit.io/).
