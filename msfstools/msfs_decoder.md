@@ -46,10 +46,10 @@ When both are **False**, we get a dictionary like  :
 
 >*{'image' : np.array([....]), 'values' : np.array([....])}*
 
-When only ***only_path*** is **False**, we get a dictionary like  :
+When only ***only_path*** is **True**, we get a dictionary like  :
 >*{'image' : "/home/alldatasets/mydataset/000.png", 'values' : np.array([....])}*
 
-When only ***only_images*** is **False**, we get the image as an output  :
+When only ***only_images*** is **True**, we get the image as an output  :
 >np.array([....])
 
 When both are **True**, we get a *string* of the image path   :

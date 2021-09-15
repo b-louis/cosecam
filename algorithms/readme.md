@@ -37,9 +37,7 @@ Processes after detection, takes a image as input and return an image too.
 
 | name             | description                                                  |
 | ---------------- | ------------------------------------------------------------ |
-| **MedianFilter** | A [median filter](https://en.wikipedia.org/wiki/Median_filter) |
-| **GaussFilter**  | A [gaussian filter](https://en.wikipedia.org/wiki/Gaussian_blur) |
-| **tree_filter**  | A tree filter, that discriminates on pixel's HSV color       |
+| **MedianDilate** | A median filter then a dilatation. The objective is to enhance points to get bigger responses (like blobs) |
 
 ## Thresholding
 

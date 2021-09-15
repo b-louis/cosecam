@@ -3,6 +3,7 @@ import os
 import sys
 from PySide2 import QtWidgets,QtGui
 from PySide2.QtCore import QThread, Qt
+from cv2 import AKAZE
 from main_window import Ui_MainWindow
 sys.path.insert(1, os.path.join(sys.path[0], '../..'))
 from msfstools.msfs_dec import *
@@ -21,7 +22,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         output_formats = ['png','jpg','tiff','bmp']
         output_mode = ['only homography','homography and georef*','only georef*']
         elevation_type = ['DEM','GEOID*','VALUE*']
-        descriptors = ['SIFT','ORB*','BRiEF*']
+        descriptors = ['SIFT','ORB','AKAZE','BRISK']
         ortho_methods = ['GDALWARP cmd','OTB python*']
         type_in = ['MSFS dataset folder','Files*']
         gcps_method = ['Stereo gcps']
@@ -64,13 +65,21 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             in_epsg = fill_default_value(self.lineEdit_srs_epsg.text(),4326)
             out_epsg = fill_default_value(self.lineEdit_tgt_epsg.text(),3857)
             gdal_format = fill_default_value(self.lineEdit_gdal_format.text(),"GTiff")
+            descriptor = "Descriptors."+self.comboBox_descriptors.currentText()
+            matcher = "Matchers."+self.comboBox_matchers.currentText()
             config = {
+                # Data parameters
                 'root_folder':self.lineEdit_root.text(),
                 'folder_name':self.lineEdit_dataset.text(),
 
                 'only_images':False,
                 'only_path':False,
-                
+
+                # Features parameters
+                'mode': eval('['+descriptor+','+matcher+']'),
+                'd' : self.doubleSpinBox_matchd.value(),
+
+                # Gdal/OTB parameters
                 'output':self.lineEdit_output_rasters.text(),
                 'elev_mode':self.comboBox_elevation_type.currentText(),
                 'dem':self.lineEdit_elev_file.text(),
@@ -105,7 +114,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             # Step 2: Create a QThread object
             self.thread = QThread()
             # Step 3: Create a worker object
-            geo = Georeferencer(gcp_gen,rpc_gen,orthorect)
+            geo = Georeferencer(gcp_gen,rpc_gen,orthorect,mode=values['mode'],d=values['d'])
             self.geo = geo
             geo.setDataset(dec,values['output'])
             # Step 4: Move worker to the thread

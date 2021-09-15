@@ -2,6 +2,34 @@ import cv2 as cv
 import numpy as np
 from imutils import resize
 import skimage.measure
+from enum import *
+class Filters(IntEnum):
+	GAUSS = 0
+	MEDIAN = 1
+# Not implemented yet, to replace MedianFilter and GaussFilter
+class Filter():
+    def __init__(self,mode=Filters.GAUSS,filter_size=1):
+        filter = None
+        self.mode = mode
+        if(mode == Filters.GAUSS):
+            filter = cv.GaussianBlur
+        elif(mode == Filters.MEDIAN):
+            filter = cv.medianBlur
+        else:
+            print("May not work, mode is invalid !")
+            return
+        self.filter_size = filter_size
+    def process(self,input):
+        mode = self.mode
+        if(mode == Filters.GAUSS):
+            return filter(input,(self.filter_size,self.filter_size))
+
+        elif(mode == Filters.MEDIAN):
+            return filter(input,self.filter_size)
+        else:
+            print("May not work, mode is invalid !")
+            return
+# Not implemented yet, to replace MedianFilter and GaussFilter
 
 class MedianFilter():
     def __init__(self,filter_size=1):

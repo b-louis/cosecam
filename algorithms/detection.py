@@ -11,9 +11,6 @@ class NoProcess:
 
 
 class WeightMean:
-    """
-    
-    """
 
     def __init__(self, a=0, b=0.7, c=0.3):
         self.a = a

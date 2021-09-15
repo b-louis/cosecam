@@ -1,20 +1,25 @@
 import numpy as np
 import cv2 as cv
+from enum import * 
+class Descriptors(IntEnum):
+	SIFT = 0
+	ORB = 1
+	AKAZE = 2
+	BRISK = 3
 
-DESCRIPTOR_SIFT = 0
-DESCRIPTOR_ORB = 1
-DESCRIPTOR_AKAZE = 2
-MATCHER_BRUTE = 0
-MATCHER_FLANN = 1
+class Matchers(IntEnum):
+	FLANN = 0
+	BRUTEFORCE = 1
+
 FLANN_INDEX_KDTREE = 1
 FLANN_INDEX_LSH = 6
 
-def compute_features(img1,img2,d,mode=[DESCRIPTOR_SIFT,MATCHER_FLANN]):
+def compute_features(img1,img2,d,mode=[Descriptors.SIFT, Matchers.FLANN]):
     descriptor = None
     index_params = None
     search_params = None
     distance_norm = None
-    if(mode[0] == DESCRIPTOR_SIFT):
+    if(mode[0] == Descriptors.SIFT):
         descriptor = cv.SIFT_create()
         index_params = dict(algorithm = FLANN_INDEX_KDTREE, trees = 5)
         search_params = dict(checks = 50)
@@ -26,10 +31,12 @@ def compute_features(img1,img2,d,mode=[DESCRIPTOR_SIFT,MATCHER_FLANN]):
                         multi_probe_level = 1) #2
         search_params = dict(check=50) 
         distance_norm = cv.NORM_HAMMING
-        if(mode[0] == DESCRIPTOR_ORB):
+        if(mode[0] == Descriptors.ORB):
             descriptor = cv.ORB_create()
-        elif(mode[0] == DESCRIPTOR_AKAZE):
-            descriptor = cv.AKAZE()
+        elif(mode[0] == Descriptors.AKAZE):
+            descriptor = cv.AKAZE_create()
+        elif(mode[0] == Descriptors.BRISK):
+            descriptor = cv.BRISK_create()
         else :
             print("Config is invalid ! May not work properly ! Descriptor is not defined")
             return
@@ -37,7 +44,7 @@ def compute_features(img1,img2,d,mode=[DESCRIPTOR_SIFT,MATCHER_FLANN]):
     kp2, des2 = descriptor.detectAndCompute(img2,None)
     good = []
     i=0
-    if(mode[0] == MATCHER_BRUTE):
+    if(mode[1] == Matchers.BRUTEFORCE):
         matcher = cv.BFMatcher(distance_norm, crossCheck=True)
         matches = matcher.match(des1,des2)
         matches = sorted(matches, key = lambda x:x.distance)
@@ -46,7 +53,7 @@ def compute_features(img1,img2,d,mode=[DESCRIPTOR_SIFT,MATCHER_FLANN]):
                 good.append(m)
             i+=1
         
-    elif(mode[0] == MATCHER_FLANN):
+    elif(mode[1] == Matchers.FLANN):
         matcher = cv.FlannBasedMatcher(index_params, search_params)
         matches = matcher.knnMatch(des1,des2,k=2)
         for m,n in matches:
@@ -58,7 +65,7 @@ def compute_features(img1,img2,d,mode=[DESCRIPTOR_SIFT,MATCHER_FLANN]):
         return 
     return kp1,kp2,good
     
-
+## OLD , must be deleted ##
 def compute_sift(img1,img2,d):
     """
     computes SIFT features with a FLANN matcher  

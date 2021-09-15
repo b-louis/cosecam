@@ -1,7 +1,14 @@
 
 # Geo
 
-This part of the application is used for orthorectification.
+This part of the application is used for orthorectification. This module is splitted in 3 parts :
+
+| *name*       | *description*                               |
+| ------------ | ------------------------------------------- |
+| **georef**   | Contains all classes for orthorectification |
+| **helpers**  | Some function that facilitates computation  |
+| **imagegen** | Functions for writting the output image     |
+
 Before going further be sure you have set your environment correctly (see [requierements](../README.md))
 
 >Note that it still very rough, some features aren't implemented (those with a '*').
@@ -39,13 +46,18 @@ dem_file = "/home/user/DTEDS/N40E01.dted"
 # setting the images centers for Steregcp calculation
 center = dec.getResolution()/2
 
+# you can which the type of descriptor and matching algorithms for GCP generation
+mode = [Descriptors.SIFT,Matchers.FLANN]
+# the discriminating distance
+d = 0.1 
+
 # initialize all classes
 gcp_gen = StereoGCP(center)
 rpc_gen = RpcGenerator(dem_file)
 orthorect = OrthoRectification(projection_gdalcmd,dem_file)
 
 # we create the main object, that compute the whole 
-geo = Georeferencer(gcp_gen,rpc_gen,orthorect)
+geo = Georeferencer(gcp_gen,rpc_gen,orthorect,d=d,mode=mode)
 
 dec = Msfs_decoder("/home/user/datasets/","exemple")
 
@@ -95,9 +107,11 @@ There is some issues with *GDAL/OTB* that we encounter during our setup.
 
 ### On windows : 
 
-There's issues with the different versions of *GDAL* in , a conflict can occur with *OTB/ANACONDA-PYTHON* version.
+We are force to use CLI because *OTB's python* warpper doesn't work with python versions above *3.5.x*
 
-We use the command line method because OTB's python warpper don't work with python versions above *3.5.x*
+There's issues when different versions of *GDAL* are in conflict (the *OTB's* GDAL and  *ANACONDA-PYTHON's* version).
+
+It's solvable by reinstalling *python's gdal*/libgdal (via conda) or by using the command line method on *OTB's* directory. 
 
 In that case you'll need to change the **projection_gdalcmd** function:
 ```python 

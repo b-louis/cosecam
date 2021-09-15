@@ -172,6 +172,7 @@ class Ui_MainWindow(object):
 
         self.comboBox_mode = QComboBox(self.groupBox)
         self.comboBox_mode.setObjectName(u"comboBox_mode")
+        self.comboBox_mode.setEnabled(False)
 
         self.verticalLayout_3.addWidget(self.comboBox_mode)
 
@@ -224,6 +225,7 @@ class Ui_MainWindow(object):
 
         self.comboBox_elevation_type = QComboBox(self.groupBox_2)
         self.comboBox_elevation_type.setObjectName(u"comboBox_elevation_type")
+        self.comboBox_elevation_type.setEnabled(False)
 
         self.verticalLayout_4.addWidget(self.comboBox_elevation_type)
 
@@ -271,6 +273,7 @@ class Ui_MainWindow(object):
 
         self.comboBox_gcps_methods = QComboBox(self.groupBox_4)
         self.comboBox_gcps_methods.setObjectName(u"comboBox_gcps_methods")
+        self.comboBox_gcps_methods.setEnabled(False)
 
         self.verticalLayout_9.addWidget(self.comboBox_gcps_methods)
 
@@ -281,6 +284,7 @@ class Ui_MainWindow(object):
 
         self.comboBox_rpcs_methods = QComboBox(self.groupBox_4)
         self.comboBox_rpcs_methods.setObjectName(u"comboBox_rpcs_methods")
+        self.comboBox_rpcs_methods.setEnabled(False)
 
         self.verticalLayout_9.addWidget(self.comboBox_rpcs_methods)
 
@@ -291,6 +295,7 @@ class Ui_MainWindow(object):
 
         self.comboBox_ortho_methods = QComboBox(self.groupBox_4)
         self.comboBox_ortho_methods.setObjectName(u"comboBox_ortho_methods")
+        self.comboBox_ortho_methods.setEnabled(False)
 
         self.verticalLayout_9.addWidget(self.comboBox_ortho_methods)
 
@@ -325,30 +330,44 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_8.addWidget(self.comboBox_descriptors)
 
+        self.label_22 = QLabel(self.groupBox_3)
+        self.label_22.setObjectName(u"label_22")
+
+        self.verticalLayout_8.addWidget(self.label_22)
+
+        self.comboBox_matchers = QComboBox(self.groupBox_3)
+        self.comboBox_matchers.addItem("")
+        self.comboBox_matchers.addItem("")
+        self.comboBox_matchers.setObjectName(u"comboBox_matchers")
+
+        self.verticalLayout_8.addWidget(self.comboBox_matchers)
+
         self.label_16 = QLabel(self.groupBox_3)
         self.label_16.setObjectName(u"label_16")
 
         self.verticalLayout_8.addWidget(self.label_16)
 
-        self.doubleSpinBox = QDoubleSpinBox(self.groupBox_3)
-        self.doubleSpinBox.setObjectName(u"doubleSpinBox")
-        self.doubleSpinBox.setDecimals(2)
-        self.doubleSpinBox.setSingleStep(0.010000000000000)
-        self.doubleSpinBox.setValue(0.100000000000000)
+        self.doubleSpinBox_matchd = QDoubleSpinBox(self.groupBox_3)
+        self.doubleSpinBox_matchd.setObjectName(u"doubleSpinBox_matchd")
+        self.doubleSpinBox_matchd.setDecimals(2)
+        self.doubleSpinBox_matchd.setMaximum(999.990000000000009)
+        self.doubleSpinBox_matchd.setSingleStep(0.010000000000000)
+        self.doubleSpinBox_matchd.setValue(0.100000000000000)
 
-        self.verticalLayout_8.addWidget(self.doubleSpinBox)
+        self.verticalLayout_8.addWidget(self.doubleSpinBox_matchd)
 
         self.label_18 = QLabel(self.groupBox_3)
         self.label_18.setObjectName(u"label_18")
 
         self.verticalLayout_8.addWidget(self.label_18)
 
-        self.spinBox = QSpinBox(self.groupBox_3)
-        self.spinBox.setObjectName(u"spinBox")
-        self.spinBox.setMaximum(100000)
-        self.spinBox.setValue(100)
+        self.spinBox_minmatches = QSpinBox(self.groupBox_3)
+        self.spinBox_minmatches.setObjectName(u"spinBox_minmatches")
+        self.spinBox_minmatches.setEnabled(False)
+        self.spinBox_minmatches.setMaximum(100000)
+        self.spinBox_minmatches.setValue(10)
 
-        self.verticalLayout_8.addWidget(self.spinBox)
+        self.verticalLayout_8.addWidget(self.spinBox_minmatches)
 
         self.verticalSpacer_5 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
@@ -463,6 +482,10 @@ class Ui_MainWindow(object):
         self.lineEdit_gdal_format.setPlaceholderText(QCoreApplication.translate("MainWindow", u"default GTiff", None))
         self.groupBox_3.setTitle("")
         self.label_15.setText(QCoreApplication.translate("MainWindow", u"Descriptors", None))
+        self.label_22.setText(QCoreApplication.translate("MainWindow", u"Matcher", None))
+        self.comboBox_matchers.setItemText(0, QCoreApplication.translate("MainWindow", u"FLANN", None))
+        self.comboBox_matchers.setItemText(1, QCoreApplication.translate("MainWindow", u"BRUTEFORCE", None))
+
         self.label_16.setText(QCoreApplication.translate("MainWindow", u"Match distance", None))
         self.label_18.setText(QCoreApplication.translate("MainWindow", u"Minimum matched features", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QCoreApplication.translate("MainWindow", u"Advanced", None))
@@ -471,11 +494,180 @@ class Ui_MainWindow(object):
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">This QT-GUI is use for orthorectification, before use you need :</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">- GDAL</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">- OTB </span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-ri"
-                        "ght:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;\"><br /></p></body></html>", None))
+"<h1 style=\" margin-top:18px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a name=\"geo\"></a><span style=\" font-size:8pt; font-weight:600;\">G</span><span style=\" font-size:8pt; font-weight:600;\">eo</span></h1>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">This part of the application is used for orthorectification. Before going further be sure you have set your environment correctly (see requierements)</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:40px; margin-right:40px; -qt-bl"
+                        "ock-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">Note that it still very rough, some features aren't implemented (those with a '*').</span></p>\n"
+"<h2 style=\" margin-top:16px; margin-bottom:12px; margin-left:40px; margin-right:40px; -qt-block-indent:0; text-indent:0px;\"><a name=\"overview\"></a><span style=\" font-size:8pt; font-weight:600;\">O</span><span style=\" font-size:8pt; font-weight:600;\">verview</span></h2>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:40px; margin-right:40px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">This module is use to do the whole orthorectification from a non georeferenced image with GPS values at center to a orthorectified image (georeferenced or not)</span></p>\n"
+"<h2 style=\" margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a name=\"functions\"></a><span style=\" font-size:8pt; font-weight:600;\">F</span><span style=\" font-size:8pt; font-weight"
+                        ":600;\">unctions</span></h2>\n"
+"<table border=\"0\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;\" cellspacing=\"2\" cellpadding=\"0\"><thead>\n"
+"<tr>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt; font-weight:600; font-style:italic;\">functions</span></p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt; font-weight:600; font-style:italic;\">description</span></p></td></tr></thead>\n"
+"<tr>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt; font-weight:600;\">coords_distance</span></p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span sty"
+                        "le=\" font-size:8pt;\">Computes the distance between on earth's surface</span></p></td></tr>\n"
+"<tr>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt; font-weight:600;\">cal_lat_lon</span></p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">Computes the longitude and latitude from a point with distance and angle</span></p></td></tr>\n"
+"<tr>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt; font-weight:600;\">angle_from_coord</span></p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">Computes the angle between true north and a point</span></p><"
+                        "/td></tr>\n"
+"<tr>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt; font-weight:600;\">load_gcps</span></p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">Loads </span><span style=\" font-size:8pt; font-style:italic;\">GCPs</span><span style=\" font-size:8pt;\"> from a file and parses them in a </span><span style=\" font-size:8pt; font-style:italic;\">numpy.array</span></p></td></tr>\n"
+"<tr>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt; font-weight:600;\">generate_input_tif</span></p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">Genera"
+                        "tes a georeferenced image from image, a list of </span><span style=\" font-size:8pt; font-style:italic;\">GCPs</span><span style=\" font-size:8pt;\"> and a elevation map</span></p></td></tr>\n"
+"<tr>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt; font-weight:600;\">convert_save_gcps</span></p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">Converts the </span><span style=\" font-size:8pt; font-style:italic;\">GCPs</span><span style=\" font-size:8pt;\"> format for </span><span style=\" font-size:8pt; font-style:italic;\">GDAL</span></p></td></tr>\n"
+"<tr>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt; font-weight:600;\">readgeom</span></p></td>\n"
+"<td>\n"
+"<p"
+                        " style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">Reads a </span><span style=\" font-size:8pt; font-style:italic;\">geom</span><span style=\" font-size:8pt;\"> file and parses it in </span><span style=\" font-size:8pt; font-style:italic;\">numpy.array</span></p></td></tr>\n"
+"<tr>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt; font-weight:600;\">generate_rpc</span></p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">Generates </span><span style=\" font-size:8pt; font-style:italic;\">RPCs</span><span style=\" font-size:8pt;\"> with a list of points</span></p></td></tr>\n"
+"<tr>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-b"
+                        "lock-indent:0; text-indent:0px;\"><span style=\" font-size:8pt; font-weight:600;\">projection_gdalcmd</span></p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt; font-style:italic;\">gdalwarp</span><span style=\" font-size:8pt;\"> CLI function warpper in python</span></p></td></tr></table>\n"
+"<h2 style=\" margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a name=\"classes\"></a><span style=\" font-size:8pt; font-weight:600;\">C</span><span style=\" font-size:8pt; font-weight:600;\">lasses</span></h2>\n"
+"<table border=\"0\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;\" cellspacing=\"2\" cellpadding=\"0\"><thead>\n"
+"<tr>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt; font-weight:600"
+                        "; font-style:italic;\">classes</span></p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt; font-weight:600; font-style:italic;\">description</span></p></td></tr></thead>\n"
+"<tr>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt; font-weight:600;\">StereoGCP</span></p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">Class that generates </span><span style=\" font-size:8pt; font-style:italic;\">GCPs</span></p></td></tr>\n"
+"<tr>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt; font-weight:600;\">RpcGenerator</span></p></td>\n"
+"<td>\n"
+"<p style=\" "
+                        "margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">Class that generates </span><span style=\" font-size:8pt; font-style:italic;\">RPCs</span></p></td></tr>\n"
+"<tr>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt; font-weight:600;\">OrthoRectification</span></p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">Class for orthorectification calculation</span></p></td></tr>\n"
+"<tr>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt; font-weight:600;\">Georeferencer</span></p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-blo"
+                        "ck-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">Main class for the whole process, <br />computes all images within the specified folder</span></p></td></tr></table>\n"
+"<h2 style=\" margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a name=\"example\"></a><span style=\" font-size:8pt; font-weight:600;\">E</span><span style=\" font-size:8pt; font-weight:600;\">xample</span></h2>\n"
+"<p style=\" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New'; font-size:8pt;\">from coscam.geo import *</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Courier New'; font-size:8pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" fon"
+                        "t-family:'Courier New'; font-size:8pt;\"># digital elevation file</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New'; font-size:8pt;\">dem_file = &quot;/home/user/DTEDS/N40E01.dted&quot;</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New'; font-size:8pt;\"># setting the images centers for Steregcp calculation</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New'; font-size:8pt;\">center = dec.getResolution()/2</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Courier New'; font-size:8pt;\"><br /></p>\n"
+"<p style=\" margin-"
+                        "top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New'; font-size:8pt;\"># initialize all classes</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New'; font-size:8pt;\">gcp_gen = StereoGCP(center)</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New'; font-size:8pt;\">rpc_gen = RpcGenerator(dem_file)</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New'; font-size:8pt;\">orthorect = OrthoRectification(projection_gdalcmd,dem_file)</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-i"
+                        "ndent:0; text-indent:0px; font-family:'Courier New'; font-size:8pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New'; font-size:8pt;\"># we create the main object, that compute the whole </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New'; font-size:8pt;\">geo = Georeferencer(gcp_gen,rpc_gen,orthorect)</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Courier New'; font-size:8pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New'; font-size:8pt;\">dec = Msfs_decoder(&quot;/home/user/datasets/&quot;,&quot;exemple&q"
+                        "uot;)</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Courier New'; font-size:8pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New'; font-size:8pt;\"># when we setDataset, we set the dataset object and </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New'; font-size:8pt;\"># the orthorectification folder output</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New'; font-size:8pt;\">geo.setDataset(dec,&quot;/home/user/datasets/example1_orthorectified/&quot;)</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top"
+                        ":0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Courier New'; font-size:8pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New'; font-size:8pt;\"># it computes all images in the folder</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New'; font-size:8pt;\">geo.run()</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Courier New'; font-size:8pt;\"><br /></p>\n"
+"<h2 style=\" margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a name=\"data-structure\"></a><span style=\" font-size:8pt; font-weight:600;\">D</span><span style=\""
+                        " font-size:8pt; font-weight:600;\">ata structure</span></h2>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">See </span><a href=\"msfs_recorder.md\"><span style=\" font-size:8pt; text-decoration: underline; color:#0000ff;\">msfs_recorder</span></a><span style=\" font-size:8pt;\"> for input data structure.</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">The output structure is : </span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New'; font-size:8pt;\">\u2514\u2500\u2500 datasets/</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New'; font-si"
+                        "ze:8pt;\">    \u251c\u2500\u2500 example1/</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New'; font-size:8pt;\">    \u2502   \u251c\u2500\u2500 000.png</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New'; font-size:8pt;\">    \u2502   \u251c\u2500\u2500 001.png</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New'; font-size:8pt;\">    \u2502   \u251c\u2500\u2500 002.png</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New'; font-size:8pt;\">    \u2502   \u251c\u2500\u2500 003.png</span></p>\n"
+"<p style=\" margin-top:0px;"
+                        " margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New'; font-size:8pt;\">    \u2502   \u251c\u2500\u2500 004.png</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New'; font-size:8pt;\">    \u2502   \u251c\u2500\u2500 005.png</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New'; font-size:8pt;\">    \u2502   \u251c\u2500\u2500 values.txt</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New'; font-size:8pt;\">    \u2502   \u2514\u2500\u2500 images.txt</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text"
+                        "-indent:0px;\"><span style=\" font-family:'Courier New'; font-size:8pt;\">    \u2514\u2500\u2500 example1_orthorectified/</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New'; font-size:8pt;\">        \u251c\u2500\u2500 000.png</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New'; font-size:8pt;\">        \u251c\u2500\u2500 001.png</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New'; font-size:8pt;\">        \u251c\u2500\u2500 002.png</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New'; font-size:8pt;\">        \u251c\u2500"
+                        "\u2500 003.png</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New'; font-size:8pt;\">        \u251c\u2500\u2500 004.png</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New'; font-size:8pt;\">        \u251c\u2500\u2500 005.png</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New'; font-size:8pt;\">        \u251c\u2500\u2500 values.txt</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New'; font-size:8pt;\">        \u2514\u2500\u2500 images.txt</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:12"
+                        "px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Courier New'; font-size:8pt;\"><br /></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">Output images are orthorectified, not georeferenced and homographied by pairs .</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">Example : </span><span style=\" font-size:8pt; font-weight:600;\">000.png</span><span style=\" font-size:8pt;\"> is homographied with </span><span style=\" font-size:8pt; font-weight:600;\">001.png</span><span style=\" font-size:8pt;\">, and </span><span style=\" font-size:8pt; font-weight:600;\">002.png</span><span style=\" font-size:8pt;\"> is homographied with </span><span style=\" font-size:8pt; font-weight:600;\">003.png</span><span style=\" font-size:8pt;\"> but </span><span"
+                        " style=\" font-size:8pt; font-weight:600;\">000.png</span><span style=\" font-size:8pt;\"> are not </span><span style=\" font-size:8pt; font-weight:600;\">002.png</span></p>\n"
+"<h2 style=\" margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a name=\"installation-issues\"></a><span style=\" font-size:8pt; font-weight:600;\">I</span><span style=\" font-size:8pt; font-weight:600;\">nstallation issues</span></h2>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">There is some issues with </span><span style=\" font-size:8pt; font-style:italic;\">GDAL/OTB</span><span style=\" font-size:8pt;\"> that we encounter during our setup.</span></p>\n"
+"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a name=\"on-windows-\"></a><span style=\" font-size:8pt; font-weight:600;\">O</span"
+                        "><span style=\" font-size:8pt; font-weight:600;\">n windows :</span></h3>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">There's issues with the different versions of </span><span style=\" font-size:8pt; font-style:italic;\">GDAL</span><span style=\" font-size:8pt;\"> in , a conflict can occur with </span><span style=\" font-size:8pt; font-style:italic;\">OTB/ANACONDA-PYTHON</span><span style=\" font-size:8pt;\"> version.</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">We use the command line method because OTB's python warpper don't work with python versions above </span><span style=\" font-size:8pt; font-style:italic;\">3.5.x</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" fo"
+                        "nt-size:8pt;\">In that case you'll need to change the </span><span style=\" font-size:8pt; font-weight:600;\">projection_gdalcmd</span><span style=\" font-size:8pt;\"> function:</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New'; font-size:8pt;\">cmd = 'E:/OTB-7.3.0-Win64/bin/gdalwarp.exe -rpc -to RPC_DEM={rpcPath} -of GTiff {srcPath}  {outPath} -overwrite -s_srs EPSG:4326 -t_srs EPSG:3857 '\\</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New'; font-size:8pt;\">.format(srcPath=in_image,outPath=out_image,rpcPath=dem)</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Courier New'; font-size:8pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; marg"
+                        "in-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New'; font-size:8pt;\">print(f&quot;COMMAND:\\n{cmd}&quot;)</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Courier New'; font-size:8pt;\"><br /></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">Replace </span><span style=\" font-size:8pt; font-weight:600;\">E:/OTB-7.3.0-Win64/bin/gdalwarp.exe</span><span style=\" font-size:8pt;\"> with your gdalwarp path.</span></p>\n"
+"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a name=\"on-linux-\"></a><span style=\" font-size:8pt; font-weight:600;\">O</span><span style=\" font-size:8pt; font-weight:600;\">n Linux:</span></h3>\n"
+"<p sty"
+                        "le=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">You can use </span><a href=\"https://www.orfeo-toolbox.org/CookBook/PythonAPI.html\"><span style=\" font-size:8pt; font-style:italic; text-decoration: underline; color:#0000ff;\">OTBApplication</span></a><span style=\" font-size:8pt;\"> instead, but for now it still uses </span><span style=\" font-size:8pt; font-style:italic;\">gdalwarp</span><span style=\" font-size:8pt;\"> on CLImode </span></p></body></html>", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_4), QCoreApplication.translate("MainWindow", u"Help", None))
         self.pushButton_run.setText(QCoreApplication.translate("MainWindow", u"Run", None))
         self.pushButton_cancel.setText(QCoreApplication.translate("MainWindow", u"Cancel", None))

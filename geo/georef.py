@@ -1,8 +1,6 @@
-from PySide2.QtCore import QObject, SIGNAL, Signal, Slot
+from PySide2.QtCore import QObject, Signal
 import imutils   
 from utils.homography import Homography
-import shutil
-from osgeo import gdal, osr
 import numpy as np
 import os
 # import matplotlib.pyplot as plt
@@ -11,51 +9,10 @@ import sys
 import time
 sys.path.insert(1, os.path.join(sys.path[0], '../..'))
 from utils.features import *
-if not os.name == 'nt':
-    # Only unusable on Windows OS (unless GDAL<3 and python = 3.5.*)
-    import otbApplication
+from geo.helpers import *
+from geo.imagegen import *
 homography = Homography()
-
-############# HELPERS #############
-
-
-def coords_distance(lat1, lon1, lat2, lon2):
-    'Computes the distance between 2 points in meters'
-    d = np.arccos(np.sin(lat1)*np.sin(lat2)+np.cos(lat1)
-                  * np.cos(lat2)*np.cos(lon1-lon2))
-    return d*6371*1e3
-
-
-def cal_lat_lon(lat1, lon1, d, tc):
-    'Computes the coordinates from a point with its distance and heading'
-    # d must be below pi/2 (a quarter of earth)
-    lat = np.arcsin(np.sin(lat1)*np.cos(d)+np.cos(lat1)*np.sin(d)*np.cos(tc))
-    if (np.cos(lat) == 0):
-        lon = lon1
-    else:
-        lon = np.mod(lon1 - np.arcsin(np.sin(tc)*np.sin(d) /
-                                      np.cos(lat))+np.pi, 2*np.pi) - np.pi
-    return lat, lon
-
-
-def angle_from_coord(p, angle):
-    'Computes the angle between the true north and a point'
-    p = p / np.linalg.norm(p)
-    return (np.arccos(p[0]) * np.arcsin(p[1]) / abs(np.arcsin(p[1])))-angle
-
-
-def load_gcps(file_input):
-    'Load GCPS from a file'
-    header = "mapX,mapY,pixelX,pixelY,enable,dX,dY,residual".split(',')
-    gcps = np.loadtxt(file_input, skiprows=2, delimiter=',')
-    gcps_d = dict(zip(header, gcps.T))
-    gcps_d['pixelY'] = gcps_d['pixelY']+2400
-    gcps_d['pixelX'] = gcps_d['pixelX']
-    return gcps_d
-############# HELPERS #############
-
 ############# STEREO GCP / RPC GEN / ORTHO REC / GEOREF #############
-
 
 class StereoGCP():
     'Estimates GCP position'
@@ -168,10 +125,18 @@ class OrthoRectification():
 class Georeferencer(QObject):
     progress = Signal(int)
     finished = Signal()
-    def __init__(self, gcp_gen, rpc_gen, rectification, dataset=None):
+    def __init__(self, 
+                gcp_gen, 
+                rpc_gen, 
+                rectification, 
+                dataset=None,
+                d=0,
+                mode=None):
         super(Georeferencer, self).__init__()
         self.gcp_gen = gcp_gen
         self.rpc_gen = rpc_gen
+        self.mode = mode
+        self.d = d
         self.rectification = rectification
         if dataset != None:
             self.setDataset(dataset)
@@ -244,19 +209,15 @@ class Georeferencer(QObject):
     # SIFTS
     # SIFTS
 
-        print("START SIFTS :")
-        # print("START ORB :")
-        # print("START AKAZE :")
-        # print("START AKAZE FLANN:")
+        print("START FEATURES MATCHING WITH :")
+        print(" Descriptor => "+self.mode[0].name)
+        print(" Matcher => "+self.mode[1].name)
         start_time = time.time()
         resized = 1200
         resized_factor = 3840/resized
         img1r = imutils.resize(img1,resized)
         img2r = imutils.resize(img2,resized)
-        kp1, kp2, good = compute_sift(img1r, img2r, d=0.1)
-        # kp1, kp2, good = compute_orb(img1, img2, 35)
-        # kp1, kp2, good = compute_akaze(img1, img2, 20)
-        # kp1, kp2, good = compute_akaze_flann(img1, img2, threshold=0.005)
+        kp1, kp2, good = compute_features(img1r, img2r, self.d,mode=self.mode)
         print(f"\t Number of features :{len(good)}")
         print("Temps de calcul des descripteurs --- %s seconds ---" %
               (time.time() - start_time))
@@ -346,220 +307,3 @@ class Georeferencer(QObject):
 
         self.count += 1
 
-############# IMAGE GENERATION #############
-
-
-def generate_input_tif(gcps, image_input, image_output, elev_file="", geoid=False):
-    """
-    Generates a GEOTIFF with georeferencement and rpc coeficients from an images and a list of points
-
-    Attributes
-    ----------
-    gcps : list
-        list of computed GCPS
-    image_input : str
-        image input path
-    image_output : str
-        image output path
-    elev_file : str
-        The elevation file, for now only dted and tiff format worked
-    geoid : bool
-        Enable or not the geoid flag. MUST be use with appropriate elev_file
-    Return
-    ----------
-
-
-    """
-    # temporary files /!\ better if each instance gets a generated name
-    tmp_gcps = "tmp/tmp_gcps.txt"
-    tmp_geom = "tmp/tmp_geom.geom"
-    # Compute GCPS and save them for OTB format
-    gcps_out, gcps_gdal = convert_save_gcps(gcps, tmp_gcps)
-    # Compute RPCs no geoid no dem
-    generate_rpc(tmp_gcps, tmp_geom, elev_file, geoid)
-    # reading rpcs
-    rpc, rpc_geom = readgeom(tmp_geom)
-    os.remove(tmp_geom)
-    os.remove(tmp_gcps)
-    # Create a copy of the original file and save it as the output filename:
-    shutil.copy(image_input, image_output)
-    # Open the output file for writing :
-    ds = gdal.Open(image_output, gdal.GA_Update)
-    # Set spatial reference:
-    sr = osr.SpatialReference()
-    # 2193 refers to the NZTM2000, but can use any desired projection
-    sr.ImportFromEPSG(4326)
-
-    # Apply the GCPs to the open output file:
-    ds.SetGCPs(gcps_gdal, sr.ExportToWkt())
-    # No RPC (not working properly)
-    ds.SetMetadata(rpc, 'RPC')
-
-    # Close the output file in order to be able to work with it in other programs:
-    ds = None
-    os.remove(image_input)
-
-
-def convert_save_gcps(gcps, file_output):
-    nb_points = gcps.shape[0]
-    new_gcps = gcps.copy()
-    new_gcps[:, -1] = 2400-new_gcps[:, -1]
-    # 0:mapX 1:mapY 2:pixelX 3:pixelY
-    gcps_gdal = [gdal.GCP(new_gcps[i][0], new_gcps[i][1], 0,
-                          new_gcps[i][2], new_gcps[i][3]) for i in range(nb_points)]
-    header = ['pixelX', 'pixelY', 'mapX', 'mapY']
-    header_save = ','.join(header)
-    np.savetxt(file_output, new_gcps[:, [
-               2, 3, 0, 1]], header=header_save, fmt='%f')
-    return new_gcps, gcps_gdal
-
-
-def readgeom(file_input):
-    'Reads and parses rpcs from a geom file (OTB)'
-    f = open(file_input)
-    values = f.readlines()
-    f.close()
-    rpc_geom = dict(map(lambda x: x.replace(
-        "\n", "").replace(" ", "").split(':'), values))
-    line_den_coeff_geom = [rpc_geom['line_den_coeff_%i' % i]for i in range(20)]
-    line_num_coeff_geom = [rpc_geom['line_num_coeff_%i' % i]for i in range(20)]
-    samp_den_coeff_geom = [rpc_geom['samp_den_coeff_%i' % i]for i in range(20)]
-    samp_num_coeff_geom = [rpc_geom['samp_num_coeff_%i' % i]for i in range(20)]
-    rpc = [
-        "HEIGHT_OFF="+(rpc_geom['height_off']),
-        "HEIGHT_SCALE="+(rpc_geom['height_scale']),
-        "LAT_OFF="+(rpc_geom['lat_off']),
-        "LAT_SCALE="+(rpc_geom['lat_scale']),
-        "LINE_DEN_COEFF="+(' '.join(line_den_coeff_geom)),
-        "LINE_NUM_COEFF="+(' '.join(line_num_coeff_geom)),
-        "LINE_OFF="+(rpc_geom['line_off']),
-        "LINE_SCALE="+(rpc_geom['line_scale']),
-        "LONG_OFF="+(rpc_geom['long_off']),
-        "LONG_SCALE="+(rpc_geom['long_scale']),
-        "SAMP_DEN_COEFF="+(' '.join(samp_den_coeff_geom)),
-        "SAMP_NUM_COEFF="+(' '.join(samp_num_coeff_geom)),
-        "SAMP_OFF="+(rpc_geom['samp_off']),
-        "SAMP_SCALE="+(rpc_geom['samp_scale'])
-    ]
-    return rpc, rpc_geom
-
-
-if not os.name == 'nt':
-    def generate_rpc(input_points, file_output, elev_file="", geoid=False):
-        'Generate RPCS from a list of points and a elevation file'
-        app = otbApplication.Registry.CreateApplication(
-            "GenerateRPCSensorModel")
-        app.SetParameterString("outgeom", file_output)
-        app.SetParameterString("outstat", "outputs/stats.geom")
-        app.SetParameterString("inpoints", input_points)
-        app.SetParameterString("map", "epsg")
-        app.SetParameterInt("map.epsg.code", 4326)
-        if len(elev_file) > 0:
-            if geoid:
-                print("USING GEOID")
-                app.SetParameterString("elev.geoid", elev_file)
-            else:
-                print("USING DEM")
-                app.SetParameterString("elev.dem", elev_file)
-        else:
-            print("NO ELEVATION SPECIFIED !")
-
-        app.ExecuteAndWriteOutput()
-
-    def projection_gdalcmd(in_image, out_image, dem):
-        """
-        Warps the input image with rpcs/gcps/elevation file
-
-        Attributes
-        ----------
-        in_image : str
-            image input path
-        out_image : str
-            image output path
-        dem : str
-            The elevation file, for now only dted and tiff format worked
-
-        Return
-        ----------
-
-
-        """
-        cmd = 'gdalwarp -rpc -to RPC_DEM={rpcPath} -of GTiff {srcPath} {outPath} -overwrite -s_srs EPSG:4326 -t_srs EPSG:3857'\
-            .format(srcPath=in_image,
-                    outPath=out_image,
-                    rpcPath=dem)
-        print(f"COMMAND:\n{cmd}")
-        return os.system(cmd)
-else:
-    def generate_rpc(
-            input_points,
-            file_output,
-            elev_file="",
-            geoid=False):
-        """
-        Generate RPCS from a list of GCPS and a elevation file
-
-        Attributes
-        ----------
-        gcps : list
-            list of computed GCPS
-        input_points : str
-            points input path
-        file_output : str
-            geom output path, it's the file that contains the rpcs
-        elev_file : str
-            The elevation file, for now only dted and tiff format worked
-        geoid : bool
-            Enable or not the geoid flag. MUST be use with appropriate elev_file
-        Return
-        ----------
-
-
-        """
-        cmd = 'otbcli_GenerateRPCSensorModel -outgeom {file_output} -outstat {outstat} -inpoints {inpoints} "-map.epsg.code" 4326 -map "epsg" '\
-            .format(
-                file_output=file_output,
-                outstat="stats.geom",
-                inpoints=input_points,
-            )
-        print(cmd)
-        if len(elev_file) > 0:
-            if geoid:
-                print("USING GEOID")
-                cmd += "-elev.geoid "+str(elev_file)
-            else:
-                print("USING DEM")
-                cmd += "-elev.dem "+str(elev_file)
-        else:
-            print("NO ELEVATION SPECIFIED !")
-        print(f"COMMAND:\n{cmd}")
-        return os.system(cmd)
-
-    def projection_gdalcmd(
-            in_image,
-            out_image,
-            dem):
-        """
-        Warps the input image with rpcs/gcps/elevation file and outputs an orthorectified/georeferenced image file
-
-        Attributes
-        ----------
-        in_image : str
-            image input path
-        out_image : str
-            image output path
-        dem : str
-            The elevation file, for now only dted and tiff format worked
-
-        ----------
-
-
-        """
-        # replace E:/OTB-7.3.0-Win64/bin/gdalwarp.exe with your otb's gdalwarp path
-        cmd = 'gdalwarp -rpc -to RPC_DEM={rpcPath} -of GTiff {srcPath} {outPath} -overwrite -s_srs EPSG:4326 -t_srs EPSG:3857 '\
-            .format(srcPath=in_image,
-                    outPath=out_image,
-                    rpcPath=dem)
-        print(f"COMMAND:\n{cmd}")
-        return os.system(cmd)
-############# IMAGE GENERATION #############
