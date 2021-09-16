@@ -2,19 +2,15 @@ import numpy as np
 import cv2 as cv
 from matplotlib import pyplot as plt
 import time
-import imutils
-import sys
-import os
 
-sys.path.append(os.path.abspath('..'))
-from utils.features import *
+from .features import *
 
 MIN_MATCH_COUNT = 10
 
 class Homography:
     def __init__(self,d=0.7,mode=[Descriptors.SIFT,Matchers.FLANN]):
         self.mode = mode
-        self.d = None
+        self.d = d
     def global_homgraphy(self,img1,img2,d):
         """
         Computes the global homography 
@@ -82,7 +78,7 @@ def main():
     homography = Homography()
     img1 = cv.imread('E:/Repos/depth/000.jpg')
     img2 = cv.imread('E:/Repos/depth/001.jpg')
-    newi1, newi2 = homography.global_homgraphy(img1,img2,30)
+    newi1, newi2 = homography.global_homgraphy(img1,img2,d=30)
     cv.imwrite('E:/Repos/depth/newi11.png',newi1)
     cv.imwrite('E:/Repos/depth/newi22.png',newi2)
 

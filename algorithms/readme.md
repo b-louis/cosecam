@@ -66,17 +66,16 @@ Input are [geo's output](../geo/readme.md)
 ## Example
 
 ```python
-from coscam.algorithms import * 
+from cosecam.algorithms import * 
 import cv2 as cv
 
 detector = detection.FrameDiff()
-preprocessor = preprocess.PreProcess(mode="median",size=3)
-postprocessor = postprocess.PostProcessC()
+preprocessor = preprocess.Filter(mode="median",size=3)
+postprocessor = postprocess.MedianDilate()
 tresholder = tresholding.Value(127)
 posttresholder = tresholding_postprocess.Opening()
 
-# in this example we load two images, but we can use a video output too
-# by taking multiple succesives images 
+# in this example we load two images
 img1 = cv.imread("my_image1.png")
 img2 = cv.imread("my_image2.png")
 frames = [img1,img2]

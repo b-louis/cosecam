@@ -1,16 +1,15 @@
 from PySide2.QtCore import QObject, Signal
 import imutils   
-from utils.homography import Homography
 import numpy as np
 import os
 # import matplotlib.pyplot as plt
 import cv2 as cv
 import sys
 import time
-sys.path.insert(1, os.path.join(sys.path[0], '../..'))
-from utils.features import *
-from geo.helpers import *
-from geo.imagegen import *
+from ..utils.features import *
+from ..utils.homography import Homography
+from .helpers import *
+from .imagegen import *
 homography = Homography()
 ############# STEREO GCP / RPC GEN / ORTHO REC / GEOREF #############
 

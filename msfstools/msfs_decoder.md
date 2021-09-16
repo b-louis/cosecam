@@ -66,7 +66,7 @@ When both are **True**, we get a *string* of the image path   :
 
 ## Example
 ```python
-from coscam.msfstools.msfs_dec import *
+from cosecam.msfstools.msfs_dec import *
 dec = Msfs_decoder("/mnt/plus/images_database/","3400ft_netherland")
 entry_1 = dec[1]
 #return > {'image' : np.array([....]), 'values' : np.array([....])}

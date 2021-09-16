@@ -2,10 +2,9 @@ import numpy as np
 import cv2 as cv
 import sys
 import os
-sys.path.insert(1, os.path.join(sys.path[0], '../..'))
 import traceback
-from utils import *
-from algorithms import *
+from ...utils import *
+from ...algorithms import *
 from imutils import paths, resize
 from PySide2.QtCore import QObject, SIGNAL, Signal, Slot   
 BOUND_ADD = 10

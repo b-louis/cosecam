@@ -39,14 +39,18 @@ This module is use to do the whole orthorectification from a non georeferenced i
 ## Example
 
 ```python
-from coscam.geo import *
+from cosecam.geo import *
+from cosecam.msfstools.msfs_dec import *
+from cosecam.utils.features import Descriptors,Matchers
 
 # digital elevation file
 dem_file = "/home/user/DTEDS/N40E01.dted"
-# setting the images centers for Steregcp calculation
+# setting images, getting the center for Steregcp calculation
+#dec = Msfs_decoder("/home/user/datasets/","exemple")
+
 center = dec.getResolution()/2
 
-# you can which the type of descriptor and matching algorithms for GCP generation
+# you can chose the type of descriptor and matching algorithms for GCP generation
 mode = [Descriptors.SIFT,Matchers.FLANN]
 # the discriminating distance
 d = 0.1 
@@ -58,8 +62,6 @@ orthorect = OrthoRectification(projection_gdalcmd,dem_file)
 
 # we create the main object, that compute the whole 
 geo = Georeferencer(gcp_gen,rpc_gen,orthorect,d=d,mode=mode)
-
-dec = Msfs_decoder("/home/user/datasets/","exemple")
 
 # when we setDataset, we set the dataset object and 
 # the orthorectification folder output

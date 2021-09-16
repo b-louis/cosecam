@@ -5,11 +5,10 @@ from PySide2 import QtWidgets,QtGui
 from PySide2.QtCore import QThread, Qt
 from cv2 import AKAZE
 from main_window import Ui_MainWindow
-sys.path.insert(1, os.path.join(sys.path[0], '../..'))
 from msfstools.msfs_dec import *
 from osgeo import gdal, osr
 import numpy as np
-from geo.georef import *
+from ...geo.georef import *
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):

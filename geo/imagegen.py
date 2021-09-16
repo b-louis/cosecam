@@ -4,14 +4,13 @@ import numpy as np
 import os
 # import matplotlib.pyplot as plt
 import sys
-sys.path.insert(1, os.path.join(sys.path[0], '../..'))
-from utils.features import *
-from geo.helpers import *
+from ..utils.features import *
+from .helpers import *
 if not os.name == 'nt':
     # Unusable on Windows OS (unless GDAL<3 and python = 3.5.*)
-    from geo.gen_lin import *
+    from .gen_lin import *
 else:
-    from geo.gen_win import *
+    from .gen_win import *
 ############# IMAGE GENERATION #############
 def generate_input_tif(gcps, image_input, image_output, elev_file="", geoid=False):
     """

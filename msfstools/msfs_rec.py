@@ -12,7 +12,7 @@ import imutils
 import sys
 import numpy as np
 import cv2 as cv
-import config.configs as config
+from ..config import configs as config
 
 class Recorder(QObject):
     progress = Signal(int)

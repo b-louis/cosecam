@@ -4,8 +4,7 @@ import sys
 from PySide2 import QtWidgets
 from PySide2.QtCore import Qt
 from main_window import Ui_MainWindow
-sys.path.insert(1, os.path.join(sys.path[0], '../..'))
-from msfstools.msfs_rec import *
+from ...msfstools.msfs_rec import *
 VARS = [
     "PLANE_ALT_ABOVE_GROUND",
     "PLANE_LATITUDE",

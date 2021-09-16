@@ -72,7 +72,7 @@ There's two ways to run the recording:
 ###### A python script example
 
 ```python
-from coscam.msfstools.msfs_rec import *
+from cosecam.msfstools.msfs_rec import *
 d3d = d3dshot.create(capture_output="numpy")
 # parameters are :
 # rootfolder,

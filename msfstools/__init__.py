@@ -1,5 +1,4 @@
 import os
+from .msfs_rec import Msfs_recorder
 if os.name == 'nt':
-    __all__ = ["msfs_rec", "msfs_dec"]
-else:
-    __all__ = ["msfs_rec"]
+    from .msfs_dec import Msfs_decoder

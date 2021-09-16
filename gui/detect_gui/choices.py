@@ -1,10 +1,9 @@
 import os,sys
-sys.path.insert(1, os.path.join(sys.path[0], '../..'))
-from algorithms.detection import *
-from algorithms.postprocess import *
-from algorithms.preprocess import *
-from algorithms.thresholding import *
-from algorithms.thresholding_postprocess import *
+from ...algorithms.detection import *
+from ...algorithms.postprocess import *
+from ...algorithms.preprocess import *
+from ...algorithms.thresholding import *
+from ...algorithms.thresholding_postprocess import *
 detection_list = {
     "Weighted Mean":WeightMean,
     "Frame Difference":FrameDiff,

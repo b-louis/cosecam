@@ -1,8 +1,7 @@
 import os
 import sys
-sys.path.insert(1, os.path.join(sys.path[0], '../..'))
-from utils.features import *
-from geo.helpers import *
+from ..utils.features import *
+from .helpers import *
 import otbApplication
 
 def generate_rpc(input_points, file_output, elev_file="", geoid=False):
