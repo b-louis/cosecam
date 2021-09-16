@@ -13,10 +13,13 @@ It's divided in 5 parts :
 
 ## Requirements
 
-To recreate the environement do :
+To setup the environement run :
+`conda env create -f environment.yaml` 
 
-`conda env create -f environment.yaml`
+If you are using a unix-based system run instead :
+`conda env create -f env-unix.yaml`
 
+Note that you may need to change the path to the env in the config file. 
 
 
 
