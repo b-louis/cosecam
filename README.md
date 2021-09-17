@@ -14,13 +14,27 @@ It's divided in 5 parts :
 ## Requirements
 
 To setup the environement run :
+
+### Windows
 `conda env create -f environment.yaml` 
 
+OTB must be installed afterward to do so follow instructions from their [documentation](https://www.orfeo-toolbox.org/CookBook/Installation.html).
+
+### Linux
 If you are using a unix-based system run instead :
-`conda env create -f env-unix.yaml`
-
-Note that you may need to change the path to the env in the config file. 
-
+```
+conda env create -f env-unix.yaml
+conda activate cosecam
+cd OTB/install/directory
+wget https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-7.3.0-Linux64.run
+chmod+x OTB-7.3.0-Linux64.run
+./OTB-7.3.0-Linux64.run
+cd OTB-7.3.0-Linux64
+source otbenv.profile
+ctest -S share/otb/swig/build_wrapping.cmake -VV
+ln -s /home/pierre/miniconda3/envs/cosecam/lib/libpython3.9.so.1.0 lib/libpython3.9.so.1.0
+```
+Optionnaly export the `/OTB-7.3.0-Linux64/lib/python` into your `PYTHONPATH` variable into `~/.bashrc` so otbApplication is always importable from python.
 
 
 > Written with [StackEdit](https://stackedit.io/).
