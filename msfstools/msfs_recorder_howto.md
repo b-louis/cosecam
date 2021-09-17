@@ -22,7 +22,7 @@ After you launch the game, you have to :
 
 5. Select your plane (**the cruising speed is different from one another**)
 
-6. Launch your flight, at the end of the loading, the game doesn't start directly it's paused. Press 'Resume??' 
+6. Launch your flight, at the end of the loading, the game doesn't start directly it's paused. Press **'Pause'** 
    **The plane is on your control at the beginning, you have to set AI pilot first**
 
 7. Menus are hidden unless you move your mouse, press **'Pause'** button.
@@ -33,13 +33,15 @@ After you launch the game, you have to :
 
 10. When everything is stable enough, **you can set your camera** 
 
-11. Go to **Camera** section and set **Drone camera** (you'll see the camera pointing to the ground)
+11. First Pause the simulation then ,**Go** to **Camera** section and set **Drone camera** in **SHOWCASE** (you'll see the camera pointing to the ground)
 
-12. Close all ingame windows (Camera, AI pilot ...) and unpause the game.<br> **Becareful,** during the recording, you have to stand still and not move anything on your computer otherwise <br>your recording will be affected by theses changes.<br>Also **remove all windows overlaying your window game** for the same reasons above. 
+12. Close all ingame windows (Camera, AI pilot ...) <br> **Becareful,** during the recording, you have to stand still and not move anything on your computer otherwise <br>your recording will be affected by theses changes.<br>Also **remove all windows overlaying your window game** for the same reasons above. 
 
-13. Now on the recorder gui, start your recording or if you use a python script, launch it.  
+13. When there's no more overlaying item and all menus are closes, unpause the game.
 
-14. We recording is finished, you'll have all your images and the planes values on the folder you specified .
+14. Now on the recorder gui, start your recording or if you use a python script, launch it.  
+
+15. When recording is finished, you'll have all your images and the planes values on the folder you specified .
 
 
 > Written with [StackEdit](https://stackedit.io/).

@@ -1,13 +1,9 @@
 # This Python file uses the following encoding: utf-8
-import os
 import sys
 from PySide2 import QtWidgets,QtGui
-from PySide2.QtCore import QThread, Qt
-from cv2 import AKAZE
-from main_window import Ui_MainWindow
-from msfstools.msfs_dec import *
-from osgeo import gdal, osr
-import numpy as np
+from PySide2.QtCore import QThread
+from .main_window import Ui_MainWindow
+from ...msfstools.msfs_dec import *
 from ...geo.georef import *
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):

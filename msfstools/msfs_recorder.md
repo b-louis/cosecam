@@ -101,3 +101,5 @@ self.pix_scale = 100/200  #(1/2 pixel for 1meter)
 ```
 
 In case you have images that have a different pixel scale, you need to change this value in this [file](../msfstools/msfs_rec.py)
+
+For now, the *QT* gui doesn't use *Qthreads*. This gui to stuck at a certain point, but it stills running in background and you can see the progress in console/terminal output.

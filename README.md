@@ -21,6 +21,7 @@ If you are using a unix-based system run instead :
 
 Note that you may need to change the path to the env in the config file. 
 
-
+## OTB installation
+[OrfeoToolBox](https://www.orfeo-toolbox.org/) has to be installed as orthorectification uses this library. To install it, refer to [OTB documentation](https://www.orfeo-toolbox.org/CookBook/Installation.html).
 
 > Written with [StackEdit](https://stackedit.io/).

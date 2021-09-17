@@ -1,10 +1,10 @@
 # This Python file uses the following encoding: utf-8
-import os
 import sys
 from PySide2 import QtWidgets
-from PySide2.QtCore import Qt
-from main_window import Ui_MainWindow
+from .main_window import Ui_MainWindow
 from ...msfstools.msfs_rec import *
+import traceback
+
 VARS = [
     "PLANE_ALT_ABOVE_GROUND",
     "PLANE_LATITUDE",
@@ -81,16 +81,22 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             'vars':save_vars,
             'units':units,
             'vars_be':save_vars_2,
-            'units_be':units_be
-        }
+            'units_be':units_be,
 
+
+            
+        }
+        print(self.spinBox_fps.value())
+        print(self.spinBox_fps.text())
         try :
-            rec = Msfs_recorder(*config)
+            rec = Msfs_recorder(*config.values())
             rec.progress.connect(self.progressBar.setValue)
             rec.finished.connect(self.process_finished)
             self.pushButton_run.setDisabled(True)
+            
             rec.run()
         except Exception as e:
+            traceback.print_exc()
             dlg = QtWidgets.QMessageBox.warning(self,"Error","{0}".format(e))
             self.process_finished()
 
