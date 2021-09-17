@@ -18,7 +18,10 @@ To setup the environement run :
 ### Windows
 `conda env create -f environment.yaml` 
 
-OTB must be installed afterward to do so follow instructions from their [documentation](https://www.orfeo-toolbox.org/CookBook/Installation.html).
+
+## OTB installation
+[OrfeoToolBox](https://www.orfeo-toolbox.org/) has to be installed as orthorectification uses this library. To install it, refer to [OTB documentation](https://www.orfeo-toolbox.org/CookBook/Installation.html).
+
 
 ### Linux
 If you are using a unix-based system run instead :

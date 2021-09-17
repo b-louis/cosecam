@@ -125,7 +125,7 @@ class Msfs_recorder(Recorder):
                 cv2.imwrite(self.root+'/'+image_name, out)
                 count += 1
                 delta = time.time() - delta
-                print("delta = %f, pause = %f" % (delta, self.pause))
+                print("no = %i , delta = %f, pause = %f" % (count,delta, self.pause))
                 time.sleep(max(self.pause - delta, 0))
                 self.progress.emit(int(100*((count+1)/self.number_images)))
 

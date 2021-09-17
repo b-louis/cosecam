@@ -3,8 +3,8 @@ import cv2 as cv
 import sys
 import os
 import traceback
-from ...utils import *
-from ...algorithms import *
+from cosecam.utils import *
+from cosecam.algorithms import *
 from imutils import paths, resize
 from PySide2.QtCore import QObject, SIGNAL, Signal, Slot   
 BOUND_ADD = 10

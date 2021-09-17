@@ -1,19 +1,14 @@
 # This Python file uses the following encoding: utf-8
-import os
 import sys
 from PySide2 import QtWidgets,QtGui
 from PySide2 import QtCore
-from PySide2.QtCore import QThread, Qt
-from main_window import Ui_MainWindow
-from msfstools.msfs_dec import *
-from osgeo import gdal, osr
+from .main_window import Ui_MainWindow
+from ...msfstools.msfs_dec import *
 import numpy as np
 from ...geo.georef import *
 from .controller import *
-import choices
-from imutils import paths, resize
-from PIL.ImageQt import ImageQt 
-from PIL import Image
+from .choices import *
+from imutils import paths
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
@@ -30,11 +25,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def fillUi(self):
 
-        self.comboBox_detection.addItems(choices.detection_list)
-        self.comboBox_postprocess.addItems(choices.postprocess_list)
-        self.comboBox_preprocess.addItems(choices.preprocess_list)
-        self.comboBox_threshold.addItems(choices.threshold_list)
-        self.comboBox_thresh_postprocess.addItems(choices.threshold_postprocess_list)
+        self.comboBox_detection.addItems(detection_list)
+        self.comboBox_postprocess.addItems(postprocess_list)
+        self.comboBox_preprocess.addItems(preprocess_list)
+        self.comboBox_threshold.addItems(threshold_list)
+        self.comboBox_thresh_postprocess.addItems(threshold_postprocess_list)
         self.param_d_dpmean.setHidden(True)
         pixmap = QtGui.QPixmap("../../dataset/000.png")
         pixmap = pixmap.scaled(max(pixmap.width() //2,1920),max(pixmap.height() //2,1200))
@@ -92,23 +87,23 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.param_po_none,
             ]
             self.button_detection = dict(zip(
-                list(choices.detection_list.keys()),
+                list(detection_list.keys()),
                 self.button_detection
                 ))
             self.button_threshold = dict(zip(
-                list(choices.threshold_list.keys()),
+                list(threshold_list.keys()),
                 self.button_threshold
                 ))
             self.button_postprocess = dict(zip(
-                list(choices.postprocess_list.keys()),
+                list(postprocess_list.keys()),
                 self.button_postprocess
                 ))
             self.button_preprocess = dict(zip(
-                list(choices.preprocess_list.keys()),
+                list(preprocess_list.keys()),
                 self.button_preprocess
                 ))
             self.button_threshold_postprocess = dict(zip(
-                list(choices.threshold_postprocess_list.keys()),
+                list(threshold_postprocess_list.keys()),
                 self.button_threshold_postprocess
                 ))
 
@@ -124,48 +119,48 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             
             ###### tres sale !
             ###### detect
-            choices.detection_selected["Weighted Mean"] = choices.detection_list["Weighted Mean"](
+            detection_selected["Weighted Mean"] = detection_list["Weighted Mean"](
                 self.param_d_weightedmean.findChild(QtWidgets.QDoubleSpinBox,"doubleSpinBox").value(),
                 self.param_d_weightedmean.findChild(QtWidgets.QDoubleSpinBox,"doubleSpinBox_2").value(),
                 self.param_d_weightedmean.findChild(QtWidgets.QDoubleSpinBox,"doubleSpinBox_3").value()
             )
-            choices.detection_selected["DPMean"] = choices.detection_list["DPMean"](
+            detection_selected["DPMean"] = detection_list["DPMean"](
                 self.param_d_dpmean.findChild(QtWidgets.QDoubleSpinBox,"doubleSpinBox_14").value(),
                 self.param_d_dpmean.findChild(QtWidgets.QDoubleSpinBox,"doubleSpinBox_15").value(),
                 self.param_d_dpmean.findChild(QtWidgets.QDoubleSpinBox,"doubleSpinBox_17").value()
             )
             ######
             ###### thresh
-            choices.threshold_selected["Value"] = choices.threshold_list["Value"](
+            threshold_selected["Value"] = threshold_list["Value"](
                 self.param_t_value.findChild(QtWidgets.QSpinBox,"spinBox_13").value()
             )
-            choices.threshold_selected["Standard deviation"] = choices.threshold_list["Standard deviation"](
+            threshold_selected["Standard deviation"] = threshold_list["Standard deviation"](
                 self.param_t_std.findChild(QtWidgets.QDoubleSpinBox,"doubleSpinBox_20").value()
             )
-            choices.threshold_selected["Pourcentage of maximum"] = choices.threshold_list["Pourcentage of maximum"](
+            threshold_selected["Pourcentage of maximum"] = threshold_list["Pourcentage of maximum"](
                 self.param_t_pourcent.findChild(QtWidgets.QDoubleSpinBox,"doubleSpinBox_19").value()
             )
-            choices.threshold_selected["Cumsum"] = choices.threshold_list["Cumsum"](
+            threshold_selected["Cumsum"] = threshold_list["Cumsum"](
                 self.param_pourcent_sp.findChild(QtWidgets.QDoubleSpinBox,"doubleSpinBox_21").value(),
                 self.param_pourcent_sp.findChild(QtWidgets.QDoubleSpinBox,"doubleSpinBox_23").value(),
             )
             ker_size= self.param_kornia.findChild(QtWidgets.QSpinBox,"spinBox_20").value()
-            choices.threshold_selected["Kornia custom"] = choices.threshold_list["Kornia custom"](
+            threshold_selected["Kornia custom"] = threshold_list["Kornia custom"](
                 (ker_size,ker_size),
                 self.param_kornia.findChild(QtWidgets.QDoubleSpinBox,"doubleSpinBox_22").value(),
             )
             ######
             ###### pre
-            choices.preprocess_selected["Median Filter"] = choices.preprocess_list["Median Filter"](
+            preprocess_selected["Median Filter"] = preprocess_list["Median Filter"](
                 self.param_pr_median.findChild(QtWidgets.QSpinBox,"spinBox_15").value()
             )
-            choices.preprocess_selected["Gauss Filter"] = choices.preprocess_list["Gauss Filter"](
+            preprocess_selected["Gauss Filter"] = preprocess_list["Gauss Filter"](
                 self.param_pr_median.findChild(QtWidgets.QSpinBox,"spinBox_15").value()
             )
             ######
             ###### post
             ker_size= self.param_po_median_sp.findChild(QtWidgets.QSpinBox,"spinBox_21").value()
-            choices.postprocess_selected["Median and Dilate"] = choices.postprocess_list["Median and Dilate"](
+            postprocess_selected["Median and Dilate"] = postprocess_list["Median and Dilate"](
                 np.ones((ker_size,ker_size)),
                 self.param_po_median_sp.findChild(QtWidgets.QSpinBox,"spinBox_24").value(),
             )
@@ -173,16 +168,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             ###### thresh post
             ker_sizex= self.param_tp_o.findChild(QtWidgets.QSpinBox,"spinBox_23").value()
             ker_sizey= self.param_tp_o.findChild(QtWidgets.QSpinBox,"spinBox_26").value()
-            choices.threshold_postprocess_selected["Opening"] = choices.threshold_postprocess_list["Opening"](
+            threshold_postprocess_selected["Opening"] = threshold_postprocess_list["Opening"](
                 (ker_sizex,ker_sizey)
             )
             values = {
 
-                'detection':choices.detection_selected[self.comboBox_detection.currentText()],
-                'preprocess':choices.preprocess_selected[self.comboBox_preprocess.currentText()],
-                'postprocess':choices.postprocess_selected[self.comboBox_postprocess.currentText()],
-                'threshold':choices.threshold_selected[self.comboBox_threshold.currentText()],
-                'threshold_postprocess':choices.threshold_postprocess_selected[self.comboBox_thresh_postprocess.currentText()],
+                'detection':detection_selected[self.comboBox_detection.currentText()],
+                'preprocess':preprocess_selected[self.comboBox_preprocess.currentText()],
+                'postprocess':postprocess_selected[self.comboBox_postprocess.currentText()],
+                'threshold':threshold_selected[self.comboBox_threshold.currentText()],
+                'threshold_postprocess':threshold_postprocess_selected[self.comboBox_thresh_postprocess.currentText()],
                 'input':self.lineEdit_input.text(),
             }
             return values
