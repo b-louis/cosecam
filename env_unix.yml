@@ -1,135 +1,89 @@
 name: cosecam
 channels:
-  - pytorch
-  - nvidia
   - conda-forge
   - defaults
 dependencies:
-  - _libgcc_mutex=0.1=conda_forge
+  - _libgcc_mutex=0.1=main
   - _openmp_mutex=4.5=1_gnu
-  - alsa-lib=1.2.3=h516909a_0
-  - blas=1.0=mkl
-  - boost-cpp=1.74.0=h312852a_4
+  - boost-cpp=1.72.0=h8e57a91_0
   - bzip2=1.0.8=h7f98852_4
-  - c-ares=1.17.2=h7f98852_0
+  - c-ares=1.17.1=h7f98852_1
   - ca-certificates=2021.5.30=ha878542_0
-  - cairo=1.16.0=h6cf1ce9_1008
+  - cairo=1.16.0=hcf35c78_1003
+  - certifi=2021.5.30=py37h89c1867_0
   - cfitsio=3.470=hb418390_7
-  - cudatoolkit=11.1.74=h6bb024c_0
-  - curl=7.79.0=hea6ffbf_0
-  - dbus=1.13.6=h48d8840_2
+  - curl=7.76.1=h979ede3_1
   - expat=2.4.1=h9c3ff4c_0
-  - font-ttf-dejavu-sans-mono=2.37=hab24e00_0
-  - font-ttf-inconsolata=3.000=h77eed37_0
-  - font-ttf-source-code-pro=2.038=h77eed37_0
-  - font-ttf-ubuntu=0.83=hab24e00_0
   - fontconfig=2.13.1=hba837de_1005
-  - fonts-conda-ecosystem=1=0
-  - fonts-conda-forge=1=0
   - freetype=2.10.4=h0708190_1
   - freexl=1.0.6=h7f98852_0
-  - gdal=3.3.2=py39h85a7741_1
-  - geos=3.9.1=h9c3ff4c_2
-  - geotiff=1.6.0=h4f31c25_6
+  - gdal=3.0.4=py37h4b180d9_10
+  - geos=3.8.1=he1b5a44_0
+  - geotiff=1.6.0=h05acad5_0
   - gettext=0.19.8.1=h0b5b191_1005
   - giflib=5.2.1=h36c2ea0_2
-  - glib=2.68.4=h9c3ff4c_0
-  - glib-tools=2.68.4=h9c3ff4c_0
-  - gst-plugins-base=1.18.5=hf529b03_0
-  - gstreamer=1.18.5=h76c114f_0
+  - glib=2.68.3=h9c3ff4c_0
+  - glib-tools=2.68.3=h9c3ff4c_0
   - hdf4=4.2.15=h10796ff_3
-  - hdf5=1.12.1=nompi_h2750804_100
-  - icu=68.1=h58526e2_0
-  - intel-openmp=2021.3.0=h06a4308_3350
-  - jbig=2.1=h7f98852_2003
+  - hdf5=1.10.6=nompi_h6a2412b_1114
+  - icu=64.2=he1b5a44_1
   - jpeg=9d=h36c2ea0_0
-  - json-c=0.15=h98cffda_0
-  - kealib=1.4.14=h87e4c3c_3
-  - krb5=1.19.2=hcc1bbae_0
-  - lcms2=2.12=hddcbb42_0
-  - ld_impl_linux-64=2.36.1=hea4e1c9_2
-  - lerc=2.2.1=h9c3ff4c_0
-  - libclang=11.1.0=default_ha53f305_1
-  - libcurl=7.79.0=h2574ce0_0
+  - json-c=0.13.1=hbfbb72e_1002
+  - kealib=1.4.14=hcc255d8_2
+  - krb5=1.17.2=h926e7f8_0
+  - ld_impl_linux-64=2.35.1=h7274673_9
+  - libblas=3.9.0=11_linux64_openblas
+  - libcblas=3.9.0=11_linux64_openblas
+  - libcurl=7.76.1=hc4aaa36_1
   - libdap4=3.20.6=hd7c4107_2
-  - libdeflate=1.7=h7f98852_5
   - libedit=3.1.20191231=he28a2e2_2
   - libev=4.33=h516909a_1
-  - libevent=2.1.10=hcdb4288_3
-  - libffi=3.3=h58526e2_2
-  - libgcc-ng=11.2.0=h1d223b6_8
-  - libgdal=3.3.2=h399a533_1
+  - libffi=3.3=he6710b0_2
+  - libgcc-ng=9.3.0=h5101ec6_17
+  - libgdal=3.0.4=he6a97d6_10
   - libgfortran-ng=11.2.0=h69a702a_8
   - libgfortran5=11.2.0=h5c6108e_8
-  - libglib=2.68.4=h3e27bee_0
-  - libgomp=11.2.0=h1d223b6_8
+  - libglib=2.68.3=h3e27bee_0
+  - libgomp=9.3.0=h5101ec6_17
   - libiconv=1.16=h516909a_0
-  - libkml=1.3.0=h238a007_1014
-  - libllvm11=11.1.0=hf817b99_2
-  - libnetcdf=4.8.1=nompi_hb3fd0d9_101
+  - libkml=1.3.0=hd79254b_1012
+  - liblapack=3.9.0=11_linux64_openblas
+  - libnetcdf=4.7.4=nompi_h56d31a8_107
   - libnghttp2=1.43.0=h812cca2_0
-  - libogg=1.3.4=h7f98852_1
   - libopenblas=0.3.17=pthreads_h8fe5266_1
-  - libopus=1.3.1=h7f98852_1
   - libpng=1.6.37=h21135ba_2
-  - libpq=13.3=hd57d9b9_0
-  - librttopo=1.1.0=h1185371_6
-  - libspatialite=5.0.1=h8694cbe_5
-  - libssh2=1.10.0=ha56f1ee_0
-  - libstdcxx-ng=11.2.0=he4da1e4_8
-  - libtiff=4.3.0=hf544144_1
+  - libpq=12.3=h255efa7_3
+  - libspatialite=4.3.0a=h2482549_1038
+  - libssh2=1.9.0=ha56f1ee_6
+  - libstdcxx-ng=9.3.0=hd4cf53a_17
+  - libtiff=4.2.0=hdc55705_0
   - libuuid=2.32.1=h7f98852_1000
-  - libuv=1.40.0=h7b6447c_0
-  - libvorbis=1.3.7=h9c3ff4c_0
-  - libwebp-base=1.2.1=h7f98852_0
+  - libwebp-base=1.2.0=h7f98852_2
   - libxcb=1.13=h7f98852_1003
-  - libxkbcommon=1.0.3=he3ba5ed_0
-  - libxml2=2.9.12=h72842e0_0
-  - libxslt=1.1.33=h15afd5d_2
-  - libzip=1.8.0=h4de3113_0
-  - lz4-c=1.9.3=h9c3ff4c_1
-  - mkl=2021.3.0=h06a4308_520
-  - mkl-service=2.4.0=py39h7f8727e_0
-  - mkl_fft=1.3.0=py39h42c9631_2
-  - mkl_random=1.2.2=py39h51133e4_0
-  - mysql-common=8.0.25=ha770c72_2
-  - mysql-libs=8.0.25=hfa10184_2
-  - ncurses=6.2=h58526e2_4
-  - ninja=1.10.2=hff7bd54_1
-  - nspr=4.30=h9c3ff4c_0
-  - nss=3.69=hb5efdd6_0
-  - numpy=1.20.3=py39hf144106_0
-  - numpy-base=1.20.3=py39h74d4b33_0
-  - olefile=0.46=pyhd3eb1b0_0
-  - openjpeg=2.4.0=hb52868f_1
-  - openssl=1.1.1l=h7f98852_0
+  - libxml2=2.9.10=hee79883_0
+  - lz4-c=1.9.2=he1b5a44_3
+  - ncurses=6.2=he6710b0_1
+  - numpy=1.21.1=py37h038b26d_0
+  - openjpeg=2.3.1=hf7af979_3
+  - openssl=1.1.1k=h7f98852_0
   - pcre=8.45=h9c3ff4c_0
-  - pillow=8.3.1=py39h2c7a002_0
-  - pip=21.2.4=pyhd8ed1ab_0
-  - pixman=0.40.0=h36c2ea0_0
-  - poppler=21.09.0=h0e1ea10_1
+  - pip=21.0.1=py37h06a4308_0
+  - pixman=0.38.0=h516909a_1003
+  - poppler=0.87.0=h4190859_1
   - poppler-data=0.4.11=hd8ed1ab_0
-  - postgresql=13.3=h2510834_0
-  - proj=8.0.1=h277dcde_0
+  - postgresql=12.3=hc2f5b80_3
+  - proj=7.0.0=h966b41f_5
   - pthread-stubs=0.4=h36c2ea0_1001
-  - pyside2=5.13.2=py39h363ec45_4
-  - python=3.9.7=h49503c6_0_cpython
-  - python_abi=3.9=2_cp39
-  - pytorch=1.9.0=py3.9_cuda11.1_cudnn8.0.5_0
-  - qt=5.12.9=hda022c4_4
-  - readline=8.1=h46c0cb4_0
-  - setuptools=58.0.4=py39hf3d152e_0
-  - six=1.16.0=pyhd3eb1b0_0
-  - sqlite=3.36.0=h9cd32fc_1
-  - tiledb=2.3.4=he87e0bf_0
-  - tk=8.6.11=h27826a3_1
-  - torchaudio=0.9.0=py39
-  - torchvision=0.2.2=py_3
-  - typing_extensions=3.10.0.0=pyhca03da5_0
+  - python=3.7.11=h12debd9_0
+  - python_abi=3.7=2_cp37m
+  - readline=8.1=h27cfd23_0
+  - setuptools=58.0.4=py37h06a4308_0
+  - sqlite=3.36.0=hc218d9a_0
+  - tiledb=1.7.7=h8efa9f0_2
+  - tk=8.6.10=hbc83047_0
   - tzcode=2021a=h7f98852_2
-  - tzdata=2021a=he74cb21_1
-  - wheel=0.37.0=pyhd8ed1ab_1
-  - xerces-c=3.2.3=h9d8b166_2
+  - wheel=0.37.0=pyhd3eb1b0_1
+  - xerces-c=3.2.2=h8412b87_1004
   - xorg-kbproto=1.0.7=h7f98852_1002
   - xorg-libice=1.0.10=h7f98852_0
   - xorg-libsm=1.2.3=hd9c2040_1000
@@ -141,23 +95,27 @@ dependencies:
   - xorg-renderproto=0.11.1=h7f98852_1002
   - xorg-xextproto=7.3.0=h7f98852_1002
   - xorg-xproto=7.0.31=h7f98852_1007
-  - xz=5.2.5=h516909a_1
-  - zlib=1.2.11=h516909a_1010
-  - zstd=1.5.0=ha95c52a_0
+  - xz=5.2.5=h7b6447c_0
+  - zlib=1.2.11=h7b6447c_3
+  - zstd=1.4.8=hdf46e1d_0
   - pip:
     - cycler==0.10.0
     - imageio==2.9.0
     - imutils==0.5.4
     - kiwisolver==1.3.2
-    - kornia==0.5.10
     - matplotlib==3.4.3
     - networkx==2.6.3
     - opencv-contrib-python==4.5.3.56
     - packaging==21.0
+    - pillow==8.3.2
     - pyparsing==2.4.7
+    - pyside2==5.15.2
     - python-dateutil==2.8.2
     - pywavelets==1.1.1
     - scikit-image==0.18.3
     - scipy==1.7.1
+    - shiboken2==5.15.2
+    - six==1.16.0
     - tifffile==2021.8.30
-prefix: /home/pierre/miniconda3/envs/test_gdal
+    - typing-extensions==3.10.0.2
+prefix: /home/pierre/miniconda3/envs/cosecam

@@ -26,8 +26,10 @@ To setup the environment run :
 ### Linux
 If you are using a unix-based system run instead :
 ```
-conda env create -f env-unix.yaml
+conda env create -f env_unix.yaml
 conda activate cosecam
+pip3 install torch==1.9.0+cu111 torchvision==0.10.0+cu111 torchaudio==0.9.0 -f https://download.pytorch.org/whl/torch_stable.html
+pip3 install kornia
 cd OTB/install/directory
 wget https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-7.3.0-Linux64.run
 chmod+x OTB-7.3.0-Linux64.run
@@ -35,7 +37,7 @@ chmod+x OTB-7.3.0-Linux64.run
 cd OTB-7.3.0-Linux64
 source otbenv.profile
 ctest -S share/otb/swig/build_wrapping.cmake -VV
-ln -s /home/pierre/miniconda3/envs/cosecam/lib/libpython3.9.so.1.0 lib/libpython3.9.so.1.0
+ln -s /home/pierre/miniconda3/envs/cosecam/lib/libpython3.7m.so.1.0 lib/libpython3.7m.so.1.0
 ```
 Optionally export the `/OTB-7.3.0-Linux64/lib/python` into your `PYTHONPATH` variable into `~/.bashrc` so *otbApplication* is always importable from python.
 
