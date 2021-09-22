@@ -15,9 +15,9 @@ homography = Homography()
 class StereoGCP():
     'Estimates GCP position'
 
-    def __init__(self, center=[0, 0], pixsize=[0.5, 0.5]):
+    def __init__(self, center=[0, 0], pix_scale=[0.5, 0.5]):
         self.center = center
-        self.pixsize = pixsize
+        self.pix_scale = pix_scale
 
     def setPoints(self, coordinates):
         self.pt1, self.pt2 = coordinates
@@ -28,8 +28,8 @@ class StereoGCP():
     def setPointsList(self, points_list):
         self.points_list = points_list
 
-    def setPixSize(self, pixsize):
-        self.pixsize = pixsize
+    def setpix_scale(self, pix_scale):
+        self.pix_scale = pix_scale
 
     def _compute_pts(self, points, D):
         """
@@ -49,7 +49,7 @@ class StereoGCP():
 
         """
         # computes PL and PR
-        pc = (points - self.center)*self.pixsize  # centered points
+        pc = (points - self.center)*self.pix_scale  # centered points
         p1 = pc[0]
         p2 = pc[1]
         denom = np.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)

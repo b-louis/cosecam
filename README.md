@@ -8,7 +8,7 @@ It's divided in 5 parts :
 | ***[geo](geo/readme.md)*** |  with all the georeferencement/orthorectification  |
 | ***[msfstools](msfstools/readme.md)*** | with all the MSFS2020 (Flight Simulator 2020), recording/decoding functions  |
 | ***[utils](utils/readme.md)*** | with features and homography function |
-| ***[config](config/readme.md)*** | config file  |
+| ***[config](#)*** | config file  |
 
 
 ## Requirements

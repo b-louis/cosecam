@@ -40,6 +40,15 @@ And multiple matching algorithms :
 
 - BruteForce
 - Flann
+- **Custom**
+
+#### Custom matcher
+
+This matcher uses a grid, in order to gain time. While using MSFS2020 generated images, we have some prior information on images.
+
+We have the displacement between two frames, and we know that the plane only move in on direction only. So the images are only shifted on the x axis.
+
+Having theses info allow us to match features locally which offer better performances.
 
 ### Example for features
 
