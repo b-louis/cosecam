@@ -9,7 +9,10 @@ from ..utils.features import *
 from ..utils.homography import Homography
 from .helpers import *
 from .imagegen import *
-homography = Homography()
+
+KTSTOMS = 1/1.94384
+
+homography = Homography(mode=[Descriptors.ORB,Matchers.BRUTEFORCE])
 ############# STEREO GCP / RPC GEN / ORTHO REC / GEOREF #############
 
 class StereoGCP():
@@ -200,23 +203,38 @@ class Georeferencer(QObject):
         self.angle = (val1['HEADING_INDICATOR']+val2['HEADING_INDICATOR'])/2
         print("Temps de calcul init --- %s seconds ---" %
               (time.time() - start_time))
+        
+        speed = (val1['AIRSPEED_INDICATED']+val2['AIRSPEED_INDICATED'])/2
+        deltat= val2['TIME']-val1['TIME']
+        speed_ms = speed*KTSTOMS
+        d_pixel = speed_ms*deltat/self.dataset.pix_scale
+        # print(f"speed_msspeed_msspeed_ms {speed_ms}")
+        # print(f"deltatdeltatdeltatdeltat {deltat}")
+        # print(f"speed_msspeed_msspeed_ms {speed_ms}")
 
     # INIT
     # INIT
     ##############################
     # SIFTS
     # SIFTS
-
+        # self.mode[1]=Matchers.CUSTOM
         print("START FEATURES MATCHING WITH :")
         print(" Descriptor => "+self.mode[0].name)
         print(" Matcher => "+self.mode[1].name)
+        # print(" Matcher => "+self.mode[1].name)
         start_time = time.time()
-        resized = 1200
-        resized_factor = 3840/resized
-        img1r = imutils.resize(img1,resized)
-        img2r = imutils.resize(img2,resized)
-        kp1, kp2, good = compute_features(img1r, img2r, self.d,mode=self.mode)
-        print(f"\t Number of features :{len(good)}")
+        # resized = 1200
+        # resized_factor = 3840/resized
+        # img1r = imutils.resize(img1,resized)
+        # img2r = imutils.resize(img2,resized)
+        # print(f"d_pixeld_pixeld_pixel {d_pixel}")
+        if(self.mode[1] == Matchers.CUSTOM):
+            kp1, kp2, good = compute_features(img1, img2, self.d,mode=self.mode,offset=d_pixel)
+        else:
+            kp1, kp2, good = compute_features(img1, img2, self.d,mode=self.mode)
+        
+        nb_features=len(good)
+        print(f"\t Number of features :{nb_features}")
         print("Temps de calcul des descripteurs --- %s seconds ---" %
               (time.time() - start_time))
 
@@ -230,13 +248,20 @@ class Georeferencer(QObject):
         print(f"\t GCPS OFFSET :{self.offset[::-1]}")
 
         start_time = time.time()
-        src_pts = [kp1[m.queryIdx].pt for m in good]
-        dst_pts = [kp2[m.trainIdx].pt for m in good]
+        if(self.mode[1] == Matchers.CUSTOM):
+            src_pts = kp1
+            dst_pts = kp2
+        else:
+            src_pts = [kp1[m.queryIdx].pt for m in good]
+            dst_pts = [kp2[m.trainIdx].pt for m in good]
 
-        src_pts = resized_factor*np.float32(src_pts).reshape(-1, 2)
-        dst_pts = resized_factor*np.float32(dst_pts).reshape(-1, 2)
+        # src_pts = resized_factor*np.float32(src_pts).reshape(-1, 2)
+        # dst_pts = resized_factor*np.float32(dst_pts).reshape(-1, 2)
+        src_pts = np.float32(src_pts).reshape(-1, 2)
+        dst_pts = np.float32(dst_pts).reshape(-1, 2)
         # for otb
         np.savetxt('src_pts.txt', src_pts)
+        np.savetxt('dst_pts.txt', dst_pts)
         src_pts[:, 1] = 2400-src_pts[:, 1]
         dst_pts[:, 1] = 2400-dst_pts[:, 1]
         pix_coords = np.array(list(zip(src_pts, dst_pts)))

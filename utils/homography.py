@@ -52,8 +52,14 @@ class Homography:
         print("Temps de calcul des descripteurs --- %s seconds ---" % (time.time() - start_timer))
         start_timer = time.time()
         if len(good)>MIN_MATCH_COUNT:
-            src_pts = np.float32([ kp1[m.queryIdx].pt for m in good ]).reshape(-1,1,2)
-            dst_pts = np.float32([ kp2[m.trainIdx].pt for m in good ]).reshape(-1,1,2)
+
+            if(self.mode[1] == Matchers.CUSTOM):
+                src_pts = kp1
+                dst_pts = kp2
+            else:
+                src_pts = [kp1[m.queryIdx].pt for m in good]
+                dst_pts = [kp2[m.trainIdx].pt for m in good]
+
             H, mask = cv.findHomography(src_pts, dst_pts, cv.RANSAC,5.0)
             # M' = S . H . S-1 
             H = np.dot(np.dot(S,H),np.linalg.inv(S))

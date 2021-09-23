@@ -90,8 +90,8 @@ def compute_features(
     elif(mode[1] == Matchers.CUSTOM):
         shape = np.ceil(np.array(img1.shape[:-1])/100).astype(int)
         skp1s, sdes1s = list2grid(kp1, des1, 100, shape)
-        skp2s, sdes2s = list2grid(kp2, des2, 100, shape, -offset)
-        matches = grid_matcher_brute(sdes1s, sdes2s)
+        skp2s, sdes2s = list2grid(kp2, des2, 100, shape, offset)
+        kp1,kp2,matches = grid_matcher_brute(sdes1s, sdes2s, skp1s ,skp2s)
     else:
         print("Config is invalid ! May not work properly ! matcher is not defined")
         return
@@ -124,7 +124,7 @@ def list2grid(kpoints, descriptors, grid_shape, shape, offset=0):
 
     return grid_kps, np.array(grid_des)
 
-def grid_matcher_brute(sdes1s, sdes2s):
+def grid_matcher_brute(sdes1s, sdes2s, skp1s ,skp2s):
     """ 
     We compute the matcher on each cells, this is done locally to gain more time
     
@@ -134,6 +134,8 @@ def grid_matcher_brute(sdes1s, sdes2s):
     bf = cv.BFMatcher(cv.NORM_L2, crossCheck=True)
     # Match descriptors.
     matches = [[[] for j in range(h)]for i in range(l)]
+    src_pts = []
+    dst_pts = []
     for i in range(l):
         for j in range(h):
             if len(sdes1s[i][j]) != 0 and len(sdes2s[i][j]) != 0:
@@ -142,7 +144,9 @@ def grid_matcher_brute(sdes1s, sdes2s):
                 # Sort them in the order of their distance.
                 match = sorted(match, key=lambda x: x.distance)
                 matches[i][j] = match[0] ## TODO: Change it or add some parameters
-    return matches
+                src_pts.append(skp1s[i][j][match[0].queryIdx].pt)
+                dst_pts.append(skp2s[i][j][match[0].trainIdx].pt)
+    return src_pts,dst_pts,matches
 
 ## OLD , must be deleted ##
 ## OLD , must be deleted ##
