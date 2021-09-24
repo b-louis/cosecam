@@ -16,8 +16,8 @@ class Filter():
         elif(mode == Filters.MEDIAN):
             filter = cv.medianBlur
         else:
-            print("May not work, mode is invalid !")
-            return
+            raise Exception("Configuration is invalid ! mode is not defined properly")
+
         self.filter_size = filter_size
     def process(self,input):
         mode = self.mode
@@ -27,8 +27,7 @@ class Filter():
         elif(mode == Filters.MEDIAN):
             return filter(input,self.filter_size)
         else:
-            print("May not work, mode is invalid !")
-            return
+            raise Exception("Configuration is invalid ! mode is not defined properly")
 # Not implemented yet, to replace MedianFilter and GaussFilter
 
 class MedianFilter():

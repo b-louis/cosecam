@@ -65,8 +65,7 @@ def compute_features(
         elif(mode[0] == Descriptors.BRISK):
             descriptor = cv.BRISK_create()
         else:
-            print("Config is invalid ! May not work properly ! Descriptor is not defined")
-            return
+            raise Exception("Config is invalid ! Descriptor is not defined")
     kp1, des1 = descriptor.detectAndCompute(img1, None)
     kp2, des2 = descriptor.detectAndCompute(img2, None)
     good = []
@@ -91,14 +90,13 @@ def compute_features(
         shape = np.ceil(np.array(img1.shape[:-1])/100).astype(int)
         skp1s, sdes1s = list2grid(kp1, des1, 100, shape)
         skp2s, sdes2s = list2grid(kp2, des2, 100, shape, offset)
-        kp1,kp2,matches = grid_matcher_brute(sdes1s, sdes2s, skp1s ,skp2s)
+        kp1,kp2,matches = grid_matcher_brute(sdes1s, sdes2s, skp1s ,skp2s,offset)
     else:
-        print("Config is invalid ! May not work properly ! matcher is not defined")
-        return
+        raise Exception("Config is invalid ! Matcher is not defined")
     return kp1, kp2, good
 
 
-def list2grid(kpoints, descriptors, grid_shape, shape, offset=0):
+def list2grid(kpoints, descriptors, grid_shape, shape, offset=[0,0]):
     """ 
     We split the image into a grid, each cell contains descriptors
     
@@ -111,7 +109,8 @@ def list2grid(kpoints, descriptors, grid_shape, shape, offset=0):
     for i in range(len(kpoints)):
         kp = kpoints[i]
         y, x = kp.pt
-        x = x-offset
+        y = y-offset[1]
+        x = x-offset[0]
         i_grid = int(x//grid_shape)
         j_grid = int(y//grid_shape)
         if(
@@ -124,7 +123,7 @@ def list2grid(kpoints, descriptors, grid_shape, shape, offset=0):
 
     return grid_kps, np.array(grid_des)
 
-def grid_matcher_brute(sdes1s, sdes2s, skp1s ,skp2s):
+def grid_matcher_brute(sdes1s, sdes2s, skp1s ,skp2s,offset=[0,0]):
     """ 
     We compute the matcher on each cells, this is done locally to gain more time
     
@@ -139,130 +138,88 @@ def grid_matcher_brute(sdes1s, sdes2s, skp1s ,skp2s):
     for i in range(l):
         for j in range(h):
             if len(sdes1s[i][j]) != 0 and len(sdes2s[i][j]) != 0:
-                match = bf.match(
-                    np.array(sdes1s[i][j]), np.array(sdes2s[i][j]))
+                # match = bf.match(
+                #     np.array(sdes1s[i][j]), np.array(sdes2s[i][j]))
+                # match=myBruteMatch(np.array(sdes1s[i][j]), np.array(sdes2s[i][j]))
+                match=myBruteMatchEuclD(
+                    np.array(sdes1s[i][j]), 
+                    np.array(sdes2s[i][j]),
+                    np.array(skp1s[i][j]), 
+                    np.array(skp2s[i][j]),
+                    offset
+                    )
                 # Sort them in the order of their distance.
-                match = sorted(match, key=lambda x: x.distance)
-                matches[i][j] = match[0] ## TODO: Change it or add some parameters
-                src_pts.append(skp1s[i][j][match[0].queryIdx].pt)
-                dst_pts.append(skp2s[i][j][match[0].trainIdx].pt)
+                if(len(match)>0):    
+                    match = sorted(match, key=lambda x: x.distance)
+                    matches[i][j] = match[0] ## TODO: Change it or add some parameters
+                    src_pts.append(skp1s[i][j][match[0].queryIdx].pt)
+                    dst_pts.append(skp2s[i][j][match[0].trainIdx].pt)
+    return src_pts,dst_pts,matches
+    
+def grid_matcher_brute_(sdes1s, sdes2s, skp1s ,skp2s,offset):
+    """ 
+    We compute the matcher on each cells, this is done locally to gain more time
+    
+    """
+    # l,h = np.ceil(np.array(img1.shape[:-1])/100).astype(int)
+    l, h = sdes1s.shape
+    bf = cv.BFMatcher(cv.NORM_L2, crossCheck=True)
+    # Match descriptors.
+    matches = [[[] for j in range(h)]for i in range(l)]
+    src_pts = []
+    dst_pts = []
+    i=0
+    j=0
+    match=myBruteMatchEuclD(
+        np.array(sdes1s[i][j]), 
+        np.array(sdes2s[i][j]),
+        np.array(skp1s[i][j]), 
+        np.array(skp2s[i][j]),
+        offset
+        )
+    # Sort them in the order of their distance.
+    match = sorted(match, key=lambda x: x.distance)
+    matches[i][j] = match[0] ## TODO: Change it or add some parameters
+    src_pts.append(skp1s[i][j][match[0].queryIdx].pt)
+    dst_pts.append(skp2s[i][j][match[0].trainIdx].pt)
     return src_pts,dst_pts,matches
 
-## OLD , must be deleted ##
-## OLD , must be deleted ##
-## OLD , must be deleted ##
-## OLD , must be deleted ##
-## OLD , must be deleted ##
-## OLD , must be deleted ##
-
-
-def compute_sift(img1, img2, d):
-    """
-    computes SIFT features with a FLANN matcher  
-
-    """
-    # On initialise le descripteur SIFT
-    sift = cv.SIFT_create()
-    # On recupère les points du descripteur
-    kp1, des1 = sift.detectAndCompute(img1, None)
-    kp2, des2 = sift.detectAndCompute(img2, None)
-    FLANN_INDEX_KDTREE = 1
-    index_params = dict(algorithm=FLANN_INDEX_KDTREE, trees=5)
-    search_params = dict(checks=50)
-    flann = cv.FlannBasedMatcher(index_params, search_params)
-    matches = flann.knnMatch(des1, des2, k=2)
-    # On ne garde que les points qui satisfont Lowe's ratio test.
-    good = []
-    i = 0
-    for m, n in matches:
-        if m.distance < d*n.distance:
-            good.append(m)
-        i += 1
-        # if len(good)>1000:
-        #     break
-    return kp1, kp2, good
-
-
-def compute_orb(img1, img2, d):
-    """
-    computes ORB features with a BruteForce matcher  
-
-    """
-    # On initialise le descripteur SIFT
-    orb = cv.ORB_create()
-    # On recupère les points du descripteur
-    kp1, des1 = orb.detectAndCompute(img1, None)
-    kp2, des2 = orb.detectAndCompute(img2, None)
-    # create BFMatcher object
-    bf = cv.BFMatcher(cv.NORM_HAMMING, crossCheck=True)
-    # Match descriptors.
-    matches = bf.match(des1, des2)
-    # Sort them in the order of their distance.
-    matches = sorted(matches, key=lambda x: x.distance)
-    # On ne garde que les points qui satisfont Lowe's ratio test.
-    good = []
-    i = 0
-    for m in matches:
-        if m.distance < d+0.5:
-            good.append(m)
-        i += 1
-        # if len(good)>1000:
-        #     break
-    return kp1, kp2, good
-
-
-def compute_akaze(img1, img2, d):
-    """
-    computes AKAZE features with a BruteForce matcher  
-    """
-    # On initialise le descripteur SIFT
-    akaze = cv.AKAZE_create()
-    # On recupère les points du descripteur
-    kp1, des1 = akaze.detectAndCompute(img1, None)
-    kp2, des2 = akaze.detectAndCompute(img2, None)
-    # create BFMatcher object
-    bf = cv.BFMatcher(cv.NORM_HAMMING, crossCheck=True)
-    # Match descriptors.
-    matches = bf.match(des1, des2)
-    # Sort them in the order of their distance.
-    matches = sorted(matches, key=lambda x: x.distance)
-    # On ne garde que les points qui satisfont Lowe's ratio test.
-    good = []
-    i = 0
-    for m in matches:
-        if m.distance < d+0.5:
-            good.append(m)
-        i += 1
-        # if len(good)>1000:
-        #     break
-    return kp1, kp2, good
-
-
-def compute_akaze_flann(img1, img2, threshold):
-    """
-    computes SIFT features with a FLANN matcher     
-
-    """
-    # On initialise le descripteur SIFT
-    akaze = cv.AKAZE_create(threshold=threshold,
-                            descriptor_type=cv.AKAZE_DESCRIPTOR_MLDB_UPRIGHT)
-    # On recupère les points du descripteur
-    kp1, des1 = akaze.detectAndCompute(img1, None)
-    kp2, des2 = akaze.detectAndCompute(img2, None)
-    FLANN_INDEX_LSH = 6
-    # FLANN_INDEX_KDTREE = 1
-    index_paramsk = dict(algorithm=FLANN_INDEX_LSH,
-                         table_number=6,  # 12
-                         key_size=12,     # 20
-                         multi_probe_level=1)  # 2
-    # index_paramsk = dict(algorithm = FLANN_INDEX_KDTREE, trees = 5)
-    search_paramsk = dict(check=50)
-    flann = cv.FlannBasedMatcher(index_paramsk, search_paramsk)
-    # matchesaf = flann.knnMatch(des1.astype(np.float32),des2.astype(np.float32),k=2)
-    matchesaf = flann.knnMatch(des1, des2, k=2)
-    good = []
-    for m, n in matchesaf:
-        # if m.distance < 0.7*n.distance:
-        if m.distance < 0.6*n.distance and m.distance > 0.2*n.distance:
-            good.append(m)
-    return kp1, kp2, good
+def myBruteMatch(des1,des2):#,kp1s,kp2s):
+    dmatchs = []
+    # matchs = np.ones((len(des1),len(des2))) * np.Infinity
+    matchs = np.ones((len(des1)))
+    for i in range(len(des1)):
+        matchs[i] = np.linalg.norm(des1[i]-des2,axis=1).argmin()
+   
+    # cross check
+    for i in range(len(des2)):
+        vals = np.linalg.norm(des2[i]-des1,axis=1)
+        curr = vals.argmin()
+        if matchs[curr] == i:
+            dmatchs.append(cv.DMatch(curr,i,vals[curr]))
+    return dmatchs
+def myBruteMatchEuclD(des1,des2,kp1s,kp2s, offset=[0,0]):
+    dmatchs = []
+    # matchs = np.ones((len(des1),len(des2))) * np.Infinity
+    ### NORMALISATION pour sift !!
+    norm_sift = 4096
+    norm_euc = np.sqrt(2*100*100)
+    matchs = np.ones((len(des1)))
+    pos1 = np.array([kp.pt for kp in kp1s])
+    pos2 = np.array([kp.pt for kp in kp2s])-offset[::-1]
+    for i in range(len(des1)):
+        desc_distance = np.linalg.norm(des1[i]-des2,axis=1)/norm_sift
+        euc_distance = np.linalg.norm(pos1[i]-pos2,axis=1)
+        d = desc_distance*0.0 + euc_distance*0.95
+        matchs[i] = np.linalg.norm(des1[i]-des2,axis=1).argmin()
+    # cross check
+    for i in range(len(des2)):
+        desc_distance = np.linalg.norm(des2[i]-des1,axis=1)/norm_sift
+        euc_distance = np.linalg.norm(pos2[i]-pos1,axis=1)/norm_euc
+        vals = desc_distance*0.0 + euc_distance*0.95
+        curr = vals.argmin()
+        if matchs[curr] == i:
+            dmatchs.append(cv.DMatch(curr,i,vals[curr]))
+            # dmatchs.append(f"{curr} => {i}")
+    # print(len(dmatchs))
+    return dmatchs   

@@ -12,7 +12,7 @@ from .imagegen import *
 
 KTSTOMS = 1/1.94384
 
-homography = Homography(mode=[Descriptors.ORB,Matchers.BRUTEFORCE])
+homography = Homography()
 ############# STEREO GCP / RPC GEN / ORTHO REC / GEOREF #############
 
 class StereoGCP():
@@ -204,13 +204,18 @@ class Georeferencer(QObject):
         print("Temps de calcul init --- %s seconds ---" %
               (time.time() - start_time))
         
-        speed = (val1['AIRSPEED_INDICATED']+val2['AIRSPEED_INDICATED'])/2
-        deltat= val2['TIME']-val1['TIME']
-        speed_ms = speed*KTSTOMS
-        d_pixel = speed_ms*deltat/self.dataset.pix_scale
-        # print(f"speed_msspeed_msspeed_ms {speed_ms}")
-        # print(f"deltatdeltatdeltatdeltat {deltat}")
-        # print(f"speed_msspeed_msspeed_ms {speed_ms}")
+        # due to offset during capture, it's difficult to use
+        # these value to compute pixel offset between two captures
+
+        # speed = (val1['AIRSPEED_INDICATED']+val2['AIRSPEED_INDICATED'])/2
+        # deltat= val2['TIME']-val1['TIME']
+        # speed_ms = speed*KTSTOMS
+        # d_pixel = speed_ms*deltat/self.dataset.pix_scale
+
+        # to bypass this problem, we do a homogrphy 
+
+        d_pixel = homography.global_homgraphy(img1,img2,d=0.7,factor=10,only_deltas=True,mode=[Descriptors.BRISK,Matchers.FLANN])
+
 
     # INIT
     # INIT
@@ -314,7 +319,7 @@ class Georeferencer(QObject):
         img2_geo = cv.imread(img2_geopath)
 
         img1_geo, img2_geo = homography.global_homgraphy(
-            img1_geo, img2_geo, d=0.3)
+            img1_geo, img2_geo, d=0.7)
 
         cv.imwrite(img1_final, img1_geo)
         cv.imwrite(img2_final, img2_geo)
