@@ -42,8 +42,8 @@ def generate_input_tif(gcps, image_input, image_output, elev_file="", geoid=Fals
     generate_rpc(tmp_gcps, tmp_geom, elev_file, geoid)
     # reading rpcs
     rpc, rpc_geom = readgeom(tmp_geom)
-    os.remove(tmp_geom)
-    os.remove(tmp_gcps)
+    # os.remove(tmp_geom)
+    # os.remove(tmp_gcps)
     # Create a copy of the original file and save it as the output filename:
     shutil.copy(image_input, image_output)
     # Open the output file for writing :
@@ -60,7 +60,7 @@ def generate_input_tif(gcps, image_input, image_output, elev_file="", geoid=Fals
 
     # Close the output file in order to be able to work with it in other programs:
     ds = None
-    os.remove(image_input)
+    #os.remove(image_input)
 
 
 def convert_save_gcps(gcps, file_output):

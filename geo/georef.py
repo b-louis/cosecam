@@ -82,6 +82,13 @@ class StereoGCP():
         d_pts = np.sqrt(pts[0]**2 + pts[1]**2)
         angle_pts = angle_from_coord(pts, angle)-np.pi/2
         pts = cal_lat_lon(*coordinates[0], d_pts*0.001/6371.0, angle_pts)
+        # print("////////////////")
+        # print(points)
+        # print(d_pts)
+        # print("////////////////")
+        print("/////")
+        print(D)
+        print("/////")
         return pts
 
     def __call__(self, pt1, pt2, points_list, angle):
@@ -156,14 +163,17 @@ class Georeferencer(QObject):
         self.offset = np.array([latt_off, lon_off])*dataset.values[0]['TIME']
 
     def run(self):
-        data1 = self.dataset[0]
-        data2 = self.dataset[1]
-        for i in range(2, self.dataset.number_images):
+        os.makedirs(self.fullpath+"/compo", exist_ok=True)
+
+        data1 = self.dataset[74]#0
+        data2 = self.dataset[75]#1
+        for i in range(76, self.dataset.number_images):#2
             self._georef(data1, data2)
             data1 = data2
             data2 = self.dataset[i]
             self.count = i
             self.progress.emit(int(100*(i+1)/self.dataset.number_images))
+            break ###
         self.finished.emit()
     def _georef(self, data1, data2):
         'Full georefencement function'
@@ -214,7 +224,7 @@ class Georeferencer(QObject):
 
         # to bypass this problem, we do a homogrphy 
 
-        d_pixel = homography.global_homgraphy(img1,img2,d=0.7,factor=8,only_deltas=True,mode=[Descriptors.BRISK,Matchers.FLANN])
+        d_pixel = homography.global_homgraphy(img1,img2,d=0.9,factor=5,only_deltas=True,mode=[Descriptors.BRISK,Matchers.FLANN])
 
 
     # INIT
@@ -228,15 +238,17 @@ class Georeferencer(QObject):
         print(" Matcher => "+self.mode[1].name)
         # print(" Matcher => "+self.mode[1].name)
         start_time = time.time()
-    # For resizing
+
+        # Resizing
         # resized = 1200
         # resized_factor = 3840/resized
         # img1r = imutils.resize(img1,resized)
         # img2r = imutils.resize(img2,resized)
         # print(f"d_pixeld_pixeld_pixel {d_pixel}")
-    # For resizing
+        # Resizing
+
         if(self.mode[1] == Matchers.CUSTOM):
-            kp1, kp2, good = compute_features(img1, img2, self.d,mode=self.mode,offset=d_pixel)
+            kp1, kp2, good = compute_features(img1, img2, self.d,grid_shape=200,mode=self.mode,offset=d_pixel)
         else:
             kp1, kp2, good = compute_features(img1, img2, self.d,mode=self.mode)
         
@@ -255,12 +267,52 @@ class Georeferencer(QObject):
         print(f"\t GCPS OFFSET :{self.offset[::-1]}")
 
         start_time = time.time()
-
+        # if(self.mode[1] == Matchers.CUSTOM):
+        #     src_pts = kp1
+        #     dst_pts = kp2
+        # else:)
         src_pts = [kp1[m.queryIdx].pt for m in good]
         dst_pts = [kp2[m.trainIdx].pt for m in good]
+        img1_blk = cv.cvtColor(img1,cv.COLOR_RGB2GRAY)
+        img2_blk = cv.cvtColor(img2,cv.COLOR_RGB2GRAY)
+        
+    # DEBUGING ON DESCRIPTOR'S MATCHINGS
+        font = cv.FONT_HERSHEY_SIMPLEX
 
+        img3 = cv.drawMatches(
+            img1_blk,kp1,
+            img2_blk,kp2,
+            good,
+            None,flags=cv.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
+        cv.imwrite(f'{self.fullpath}/compo/{img1_name}_{img2_name}.png',img3)
+
+        ptssrc  =src_pts
+        ptsdst = dst_pts
+        img1_blk = img1.copy()
+        img2_blk = img2.copy()
+        color = list(np.random.choice(range(256), size=(len(ptsdst),3)))
+        for i in range(len(ptssrc)):
+            t = ptssrc[i]
+            p = (int(t[0]),int(t[1]))
+            # print(point)
+            img1_blk = cv.putText(img1_blk, str(i), p, font, 0.5, (0, 0, 255), 2, cv.LINE_AA)
+            image1 = cv.circle(img1_blk, p, radius=3, color=color[i].tolist(), thickness=-1)
+
+        cv.imwrite(f'{self.fullpath}/compo/{img1_name}.png',image1)
+        for i in range(len(ptsdst)):
+            t = ptsdst[i]
+            p = (int(t[0]),int(t[1]))
+            # print(point)
+            img2_blk = cv.putText(img2_blk, str(i), p, font, 0.5, (0, 0, 255), 2, cv.LINE_AA)
+            image2 = cv.circle(img2_blk, p, radius=3, color=color[i].tolist(), thickness=-1)
+        cv.imwrite(f'{self.fullpath}/compo/{img2_name}.png',image2)
+    # DEBUGING 
+
+        # Resizing
         # src_pts = resized_factor*np.float32(src_pts).reshape(-1, 2)
         # dst_pts = resized_factor*np.float32(dst_pts).reshape(-1, 2)
+        # Resizing
+
         src_pts = np.float32(src_pts).reshape(-1, 2)
         dst_pts = np.float32(dst_pts).reshape(-1, 2)
         # for otb
