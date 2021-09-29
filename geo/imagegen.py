@@ -39,7 +39,7 @@ def generate_input_tif(gcps, image_input, image_output, elev_file="", geoid=Fals
     # Compute GCPS and save them for OTB format
     gcps_out, gcps_gdal = convert_save_gcps(gcps, tmp_gcps)
     # Compute RPCs no geoid no dem
-    generate_rpc(tmp_gcps, tmp_geom, elev_file, geoid)
+    generate_rpc("E:/CodeClean/tmp/tester.txt", tmp_geom, elev_file, geoid)
     # reading rpcs
     rpc, rpc_geom = readgeom(tmp_geom)
     # os.remove(tmp_geom)

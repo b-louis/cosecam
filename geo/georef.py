@@ -56,6 +56,7 @@ class StereoGCP():
         p1 = pc[0]
         p2 = pc[1]
         denom = np.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
+        print(denom)
         return p1*D/denom
 
     def compute_gcp(self, points, angle, coordinates):
@@ -86,9 +87,9 @@ class StereoGCP():
         # print(points)
         # print(d_pts)
         # print("////////////////")
-        print("/////")
-        print(D)
-        print("/////")
+        # print("/////")
+        # print(D)
+        # print("/////")
         return pts
 
     def __call__(self, pt1, pt2, points_list, angle):
