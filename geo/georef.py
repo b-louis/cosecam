@@ -214,7 +214,7 @@ class Georeferencer(QObject):
 
         # to bypass this problem, we do a homogrphy 
 
-        d_pixel = homography.global_homgraphy(img1,img2,d=0.7,factor=10,only_deltas=True,mode=[Descriptors.BRISK,Matchers.FLANN])
+        d_pixel = homography.global_homgraphy(img1,img2,d=0.7,factor=8,only_deltas=True,mode=[Descriptors.BRISK,Matchers.FLANN])
 
 
     # INIT
@@ -228,11 +228,13 @@ class Georeferencer(QObject):
         print(" Matcher => "+self.mode[1].name)
         # print(" Matcher => "+self.mode[1].name)
         start_time = time.time()
+    # For resizing
         # resized = 1200
         # resized_factor = 3840/resized
         # img1r = imutils.resize(img1,resized)
         # img2r = imutils.resize(img2,resized)
         # print(f"d_pixeld_pixeld_pixel {d_pixel}")
+    # For resizing
         if(self.mode[1] == Matchers.CUSTOM):
             kp1, kp2, good = compute_features(img1, img2, self.d,mode=self.mode,offset=d_pixel)
         else:
@@ -253,12 +255,9 @@ class Georeferencer(QObject):
         print(f"\t GCPS OFFSET :{self.offset[::-1]}")
 
         start_time = time.time()
-        if(self.mode[1] == Matchers.CUSTOM):
-            src_pts = kp1
-            dst_pts = kp2
-        else:
-            src_pts = [kp1[m.queryIdx].pt for m in good]
-            dst_pts = [kp2[m.trainIdx].pt for m in good]
+
+        src_pts = [kp1[m.queryIdx].pt for m in good]
+        dst_pts = [kp2[m.trainIdx].pt for m in good]
 
         # src_pts = resized_factor*np.float32(src_pts).reshape(-1, 2)
         # dst_pts = resized_factor*np.float32(dst_pts).reshape(-1, 2)

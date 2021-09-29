@@ -44,11 +44,21 @@ And multiple matching algorithms :
 
 #### Custom matcher
 
-This matcher uses a grid, in order to gain time. While using MSFS2020 generated images, we have some prior information on images.
+This matcher uses a grid, in order to gain time and get a homogenous density of points since RPCS need a good density to produce a better result. 
 
-We have the displacement between two frames, and we know that the plane only move in on direction only. So the images are only shifted on the x axis.
+While using MSFS2020 generated images, we have some prior information on images (speed, heading, etc). We have the displacement between two frames, and we know that the plane only move on one direction. So images are shifted on x axis only.
 
-Having theses info allow us to match features locally which offer better performances.
+Having theses information allow us to match features locally which offer better performances.
+As is there's an issues with the [*StereoGcp*](../algorithms/readme.md), some points are not estimated correctly. It gives absurd RPCS estimation that distort the final image. 
+
+This matcher takes two specific arguments :
+
+- The **grid size**, that determine the size of each cells 
+- The **offset** between two images, it's use to shift descriptor's position in image 2. We have to do this in order to have overlapping cells.
+
+The **offset** can be, in the best case computed from the speed and delta time. On MSFS2020 generated dataset, we have a time lag between captures. This lag doesn't give the right offset, to counter this issue we instead do a homography to get the right offset.
+
+Doing a homography on full-size images can be heavy, we rather downscale the images. By doing this, computation time can be divided by 100.
 
 ### Example for features
 

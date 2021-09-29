@@ -54,12 +54,8 @@ class Homography:
         start_timer = time.time()
         if len(good)>MIN_MATCH_COUNT:
 
-            if(mode[1] == Matchers.CUSTOM):
-                src_pts = kp1
-                dst_pts = kp2
-            else:
-                src_pts = [kp1[m.queryIdx].pt for m in good]
-                dst_pts = [kp2[m.trainIdx].pt for m in good]
+            src_pts = [kp1[m.queryIdx].pt for m in good]
+            dst_pts = [kp2[m.trainIdx].pt for m in good]
 
             src_pts = np.float32(src_pts).reshape(-1,1,2)
             dst_pts = np.float32(dst_pts).reshape(-1,1,2)

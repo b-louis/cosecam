@@ -22,8 +22,8 @@ class Recorder(QObject):
     def __init__(
         self, 
         root, 
-        folder_name,
         d3d , 
+        folder_name,
         number_images, 
         image_format, 
         fps = 1.0,
